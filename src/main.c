@@ -12,20 +12,29 @@
 
 #include "main.h"
 #include <math.h>
-#include "stm32_ub_vga_shapes.h"
-#include "stm32_ub_vga_IO.h"
+
 
 int main(void)
 {
 
 
-	//  uint32_t n;
+	char *functionality = "ARM-board \r";		// Showed on UART3 at startup
+
 	SystemInit(); // System speed to 168MHz
+
+	uart_dma_init();
+
+	USART2_IRQHandler();
+
+	DMA1_Stream5_IRQHandler();
+
+	UART_printf(256,functionality);
 
 	UB_VGA_Screen_Init(); // Init VGA-Screen
 
 
 	UB_VGA_FillScreen(VGA_COL_BLACK);
+
 	//demo code to show lines work from every angle in both directions.
 	int i;
 	for(i=10; i < 51; i++)
@@ -40,7 +49,16 @@ int main(void)
 
   while(1)
   {
-	  // put the code here
+	        /**
+	         * Loop data back to UART data register
+	         */
+	        while (Read != Write) {                 /* Do it until buffer is empty */
+	            USART2->DR = UART_Buffer[Read++];   /* Start byte transfer */
+	            while (!(USART2->SR & USART_SR_TXE));   /* Wait till finished */
+	            if (Read == UART_BUFFER_SIZE) {     /* Check buffer overflow */
+	                Read = 0;
+	            }
+	        }
   }
 }
 
