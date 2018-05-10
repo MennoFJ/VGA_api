@@ -35,25 +35,28 @@ In the interrupt routine the char is send back to the terminal
 
 
 /* Receive buffer for DMA */
-#define DMA_RX_BUFFER_SIZE          64
-uint8_t DMA_RX_Buffer[DMA_RX_BUFFER_SIZE];
+#define DMA_RX_BUFFER_SIZE          100
+char DMA_RX_Buffer[DMA_RX_BUFFER_SIZE];
 
 /* Buffer after received data */
-#define UART_BUFFER_SIZE            256
-uint8_t UART_Buffer[UART_BUFFER_SIZE];
+#define DMA_TX_BUFFER_SIZE            100
+char UART_TX_Buffer[DMA_TX_BUFFER_SIZE];
+
 size_t Write, Read;
 
-USART_InitTypeDef USART_InitStruct;
-DMA_InitTypeDef DMA_InitStruct;
-GPIO_InitTypeDef GPIO_InitStruct;
-NVIC_InitTypeDef NVIC_InitStruct;
+
 
 /****************Function Prototypes********************/
-void uart_dma_init(void);
 
-void USART2_IRQHandler(void);
+void RCC_Configuration(void);
 
-void DMA1_Stream5_IRQHandler(void);
+void NVIC_Configuration(void);
+
+void GPIO_Configuration(void);
+
+void USART2_Configuration(void);
+
+void DMA_Configuration(void);
 
 signed int 	UART_printf		(size_t length, const char *pFormat, ...);
 

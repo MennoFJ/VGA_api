@@ -11,7 +11,6 @@
 //--------------------------------------------------------------
 
 #include "main.h"
-#include <math.h>
 
 
 int main(void)
@@ -22,11 +21,15 @@ int main(void)
 
 	SystemInit(); // System speed to 168MHz
 
-	uart_dma_init();
+	  RCC_Configuration();
 
-	USART2_IRQHandler();
+	  NVIC_Configuration();
 
-	DMA1_Stream5_IRQHandler();
+	  GPIO_Configuration();
+
+	  USART2_Configuration();
+
+	  DMA_Configuration();
 
 	UART_printf(256,functionality);
 
@@ -49,16 +52,16 @@ int main(void)
 
   while(1)
   {
-	        /**
-	         * Loop data back to UART data register
-	         */
-	        while (Read != Write) {                 /* Do it until buffer is empty */
-	            USART2->DR = UART_Buffer[Read++];   /* Start byte transfer */
-	            while (!(USART2->SR & USART_SR_TXE));   /* Wait till finished */
-	            if (Read == UART_BUFFER_SIZE) {     /* Check buffer overflow */
-	                Read = 0;
-	            }
-	        }
+//	        /**
+//	         * Loop data back to UART data register
+//	         */
+//	        while (Read != Write) {                 /* Do it until buffer is empty */
+//	            USART2->DR = UART_Buffer[Read++];   /* Start byte transfer */
+//	            while (!(USART2->SR & USART_SR_TXE));   /* Wait till finished */
+//	            if (Read == UART_BUFFER_SIZE) {     /* Check buffer overflow */
+//	                Read = 0;
+//	            }
+//	        }
   }
 }
 
