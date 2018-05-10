@@ -4,3 +4,5 @@
 *.list
 
 \.settings/language\.settings\.xml
+
+*.map
