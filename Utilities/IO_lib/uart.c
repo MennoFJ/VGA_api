@@ -50,7 +50,7 @@ void USART2_Configuration(void)
         - Hardware flow control disabled (RTS and CTS signals)
         - Receive and transmit enabled
   */
-  USART_InitStructure.USART_BaudRate = 115200;
+  USART_InitStructure.USART_BaudRate = 9600;
   USART_InitStructure.USART_WordLength = USART_WordLength_8b;
   USART_InitStructure.USART_StopBits = USART_StopBits_1;
   USART_InitStructure.USART_Parity = USART_Parity_No;
@@ -140,10 +140,10 @@ void DMA_Configuration(void)
 void DMA1_Stream6_IRQHandler(void) // USART2_TX
 {
   /* Test on DMA Stream Transfer Complete interrupt */
-  if (DMA_GetITStatus(DMA1_Stream6, DMA_IT_TCIF0))
+  if (DMA_GetITStatus(DMA1_Stream6, DMA_IT_TCIF6))
   {
     /* Clear DMA Stream Transfer Complete interrupt pending bit */
-    DMA_ClearITPendingBit(DMA1_Stream6, DMA_IT_TCIF0);
+    DMA_ClearITPendingBit(DMA1_Stream6, DMA_IT_TCIF6);
   }
 }
 
@@ -152,10 +152,10 @@ void DMA1_Stream6_IRQHandler(void) // USART2_TX
 void DMA1_Stream5_IRQHandler(void) // USART2_RX
 {
   /* Test on DMA Stream Transfer Complete interrupt */
-  if (DMA_GetITStatus(DMA1_Stream5, DMA_IT_TCIF6))
+  if (DMA_GetITStatus(DMA1_Stream5, DMA_IT_TCIF5))
   {
     /* Clear DMA Stream Transfer Complete interrupt pending bit */
-    DMA_ClearITPendingBit(DMA1_Stream5, DMA_IT_TCIF6);
+    DMA_ClearITPendingBit(DMA1_Stream5, DMA_IT_TCIF5);
   }
 }
 
