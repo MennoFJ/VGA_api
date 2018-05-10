@@ -48,7 +48,7 @@ const char *UB_VGA_SetPixel(uint16_t xp, uint16_t yp, uint8_t color)
 //--------------------------------------------------------------
 
 //@TODO: Add AA, add width, add errors.
-const char *UB_VGA_drawLine(uint16_t x_start,uint16_t y_start,uint16_t x_stop, uint16_t y_stop, uint8_t color, uint8_t width)
+const char *UB_VGA_drawLine(uint16_t x_start,uint16_t y_start,uint16_t x_stop, uint16_t y_stop, uint8_t width, uint8_t color)
 {
   int16_t dx = x_stop - x_start;
   int16_t dy = y_stop - y_start;
@@ -73,7 +73,6 @@ const char *UB_VGA_drawLine(uint16_t x_start,uint16_t y_start,uint16_t x_stop, u
 }
 //--------------------------------------------------------------
 // draws a rectangle from x_lo, y_lo to x_rb, y_rb
-// this function is different from the drawRactangle function. The rectangle can be rotated by x degrees. (not a param it's based on the location of x/y_lo and x/y_rb)
 // Important : the last Pixel+1 from every line must be black (don't know why??)
 //--------------------------------------------------------------
 //@TODO:add errors.
@@ -84,11 +83,118 @@ const char *UB_VGA_drawRectangle(uint16_t x_lo,uint16_t y_lo,uint16_t x_rb, uint
 	//uint16_t x_ro = x_rb;
 	for(int i = y_lb; i < y_lo; i++)
 	{
-		UB_VGA_drawLine(x_lo, i ,x_rb, i, color, 1);
+		UB_VGA_drawLine(x_lo, i ,x_rb, i, 1, color);
 	}
 	return "no errors \n";
 }
 
+
+//--------------------------------------------------------------
+// draws a rectangle from mpx, mpy (mid point x and mid point y) with radius x and radius y.
+// Important : the last Pixel+1 from every line must be black (don't know why??)
+//--------------------------------------------------------------
+//Does not work so well in the y direction. Dont know why.
+const char *UB_VGA_drawEllipse(long xmp,long ymp,long x_radius, long y_radius, uint8_t color)
+{
+	 UB_VGA_SetPixel(xmp, ymp, color);
+	 long xLeft = xmp - x_radius;
+	 long xRight = xmp + x_radius;
+	 long yUp = ymp - y_radius;
+	 long yDown = ymp + y_radius;
+//
+//	 //squares x and y
+//	 long xsq = xmp * xmp;
+//	 long ysq = ymp * ymp;
+//	 //multiplies the values above by 2.
+//	 long twoxmpsq = 2 * xsq;
+//	 long twoympsq = 2 * ysq;
+//
+//	 long x = 0;
+//	 long y = ymp;
+//	 //no clue what d1 is
+//	 long d1 = ysq - ysq * ymp +(0.25 * xsq);
+//	 long d2;
+//	 long dx = twoympsq * x;
+//	 long dy = twoxmpsq * y;
+//
+//	 do
+//	 {
+//		 UB_VGA_SetPixel(xmp, ymp, color);
+//		 UB_VGA_SetPixel(xmp, ymp, color);
+//		 UB_VGA_SetPixel(xmp, ymp, color);
+//		 UB_VGA_SetPixel(xmp, ymp, color);
+//	 }while(y > 0);
+//http://www.studentcpu.com/2010/07/write-source-code-mid-point-ellipse.html
+
+	 int x,y;
+	 float d1,d2,dx,dy, rxpsq, rypsq;
+	 x = 0;
+	 y = y_radius;
+	 rxpsq = x_radius * x_radius;
+	 rypsq = y_radius * y_radius;
+	 d1 = (rypsq) - (y_radius * rxpsq + (0.25 * rxpsq));
+	 dx = 2 * rypsq * x;
+	 dy = 2 * rxpsq * y;
+
+	 do
+	 {
+		 setFourPixels(xmp, ymp ,x ,y, color);
+		 if(d1 < 0)
+		 {
+			 x++;
+			 dx = dx + (2 * rypsq);
+			 d1 = d1 + dx + rypsq;
+		 }
+		 else
+		 {
+			x++;
+			y--;
+			dx = dx + (2 * rypsq);
+			dy = dy - (2 * rxpsq);
+			d1 = d1 + dx -dy + rypsq;
+		 }
+	 }while(dx < dy);
+	 do
+	 {
+		 setFourPixels(xmp, ymp ,x ,y, color);
+		 if(d2 > 0)
+		 {
+			 x = x;
+			 y--;
+			 dy = dy - (2 * rxpsq);
+			 d2 = d2- dy + rxpsq;
+		 }
+		 else
+		 {
+			 x++;
+			 y--;
+			 dy = dy - (2 * rxpsq);
+			 dx = dx + (2 * rypsq);
+			 d2 = d2 +dx - dy + rxpsq;
+		 }
+	 }while(y > 0);
+
+
+//http://ankurm.com/implementing-midpoint-ellipse-algorithm-in-c/
+
+	 UB_VGA_SetPixel(xLeft, ymp, VGA_COL_BLUE);
+	 UB_VGA_SetPixel(xRight, ymp, VGA_COL_GREEN);
+	 UB_VGA_SetPixel(xmp, yUp, VGA_COL_WHITE);
+	 UB_VGA_SetPixel(xmp, yDown, VGA_COL_YELLOW);
+
+
+}
+
+
+//sets four pixels at once for the ellipse function
+
+void setFourPixels(uint16_t xs, uint16_t ys, uint16_t x, uint16_t y, uint8_t color)
+{
+	UB_VGA_SetPixel(xs + x, ys + y, color);
+	UB_VGA_SetPixel(xs - x, ys - y, color);
+	UB_VGA_SetPixel(xs + x, ys - y, color);
+	UB_VGA_SetPixel(xs - x, ys + y, color);
+}
 
 //--------------------------------------------------------------
 // fill the DMA RAM buffer with one color

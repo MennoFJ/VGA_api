@@ -29,12 +29,14 @@ int main(void)
 	//demo code to show lines work from every angle in both directions.
 	int i;
 	for(i=10; i < 51; i++)
-		UB_VGA_drawLine(10,i ,50, 50, VGA_COL_RED, 3);
+		UB_VGA_drawLine(10,i ,50, 50, 3, VGA_COL_RED);
 	int j;
 		for(j=10; j < 51; j++)
-			UB_VGA_drawLine(50,50 ,90,j, VGA_COL_RED, 3);
+			UB_VGA_drawLine(50,50 ,90,j, 3, VGA_COL_RED);
 
 	UB_VGA_drawRectangle(10,100,90, 50, VGA_COL_RED);
+
+	UB_VGA_drawEllipse(150, 150, 20, 40, VGA_COL_RED);
 
 
 

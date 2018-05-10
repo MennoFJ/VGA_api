@@ -1,4 +1,6 @@
 stm32_ub_vga_shapes.c:30:13:UB_VGA_SetPixel	16	static
 stm32_ub_vga_shapes.c:51:13:UB_VGA_drawLine	40	static
-stm32_ub_vga_shapes.c:80:13:UB_VGA_drawRectangle	40	static
-stm32_ub_vga_shapes.c:97:13:UB_VGA_FillScreen	24	static
+stm32_ub_vga_shapes.c:79:13:UB_VGA_drawRectangle	40	static
+stm32_ub_vga_shapes.c:97:13:UB_VGA_drawEllipse	96	static
+stm32_ub_vga_shapes.c:191:6:setFourPixels	24	static
+stm32_ub_vga_shapes.c:203:13:UB_VGA_FillScreen	24	static
