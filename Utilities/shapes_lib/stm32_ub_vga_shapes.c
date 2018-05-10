@@ -23,19 +23,23 @@
 
 
 
+//internal functions
+void setFourPixels(uint16_t xs, uint16_t ys, uint16_t x, uint16_t y, uint8_t color);
+
 //--------------------------------------------------------------
 // put one Pixel on the screen with one color
 // Important : the last Pixel+1 from every line must be black (don't know why??)
 //--------------------------------------------------------------
 const char *UB_VGA_SetPixel(uint16_t xp, uint16_t yp, uint8_t color)
 {
+	char *error = "no errors";
   if(xp>=VGA_DISPLAY_X) xp=0;
   if(yp>=VGA_DISPLAY_Y) yp=0;
 
   // Write pixel to ram
   VGA_RAM1[(yp*(VGA_DISPLAY_X+1))+xp]=color;
   //test return
-  return "no errors \n";
+  return error;
 }
 
 
@@ -50,6 +54,20 @@ const char *UB_VGA_SetPixel(uint16_t xp, uint16_t yp, uint8_t color)
 //@TODO: Add AA, add width, add errors.
 const char *UB_VGA_drawLine(uint16_t x_start,uint16_t y_start,uint16_t x_stop, uint16_t y_stop, uint8_t width, uint8_t color)
 {
+	char *error = "no errors";
+	//checks for out of bound errors
+	if(x_start< 0 || x_stop < 0 || y_start < 0 || y_stop < 0
+			|| x_start > VGA_DISPLAY_X || x_stop > VGA_DISPLAY_X
+				|| y_start > VGA_DISPLAY_Y || y_stop > VGA_DISPLAY_Y)
+		error = "line out of bounds";
+
+	//checks for incorrect line width.
+	if(width < 0 || width > VGA_DISPLAY_Y )
+		error = "incorrect line width";
+
+	//checks for incorrect color
+	if (color < 0)
+		error = "color can't be negative";
   int16_t dx = x_stop - x_start;
   int16_t dy = y_stop - y_start;
   int16_t y;
@@ -59,17 +77,17 @@ const char *UB_VGA_drawLine(uint16_t x_start,uint16_t y_start,uint16_t x_stop, u
 	  for(x = y_start ;x <y_stop; x++)
 	  {
 		  y = y_start + dy * (x - x_start)/dx;
-		  UB_VGA_SetPixel(x_start, x, color);
+		  error = UB_VGA_SetPixel(x_start, x, color);
 	  }
   }
   else
 	  for(x = x_start ;x <x_stop; x++)
 	  {
 		  y = y_start + dy * (x - x_start)/dx;
-		  UB_VGA_SetPixel(x, y, color);
+		  error = UB_VGA_SetPixel(x, y, color);
 	  }
   //test return
-  return "no errors \n";
+  return error;
 }
 //--------------------------------------------------------------
 // draws a rectangle from x_lo, y_lo to x_rb, y_rb
@@ -78,14 +96,22 @@ const char *UB_VGA_drawLine(uint16_t x_start,uint16_t y_start,uint16_t x_stop, u
 //@TODO:add errors.
 const char *UB_VGA_drawRectangle(uint16_t x_lo,uint16_t y_lo,uint16_t x_rb, uint16_t y_rb, uint8_t color)
 {
+	char * error;
+	//checks for out of bounds errors
+	if(x_lo < 0 || y_lo < 0 || x_rb < 0 || y_rb< 0
+			|| x_lo > VGA_DISPLAY_X || x_rb> VGA_DISPLAY_X
+				|| y_lo > VGA_DISPLAY_Y || y_rb > VGA_DISPLAY_Y)
+		error = "line out of bounds";
+
+
+	//checks for incorrect color
+	if (color < 0)
+		error = "color can't be negative";
 	//mirrors the points x/y_lo and x/y_rb.
 	uint16_t y_lb = y_rb;
-	//uint16_t x_ro = x_rb;
 	for(int i = y_lb; i < y_lo; i++)
-	{
-		UB_VGA_drawLine(x_lo, i ,x_rb, i, 1, color);
-	}
-	return "no errors \n";
+		error = UB_VGA_drawLine(x_lo, i ,x_rb, i, 1, color);
+	return error;
 }
 
 
@@ -96,36 +122,13 @@ const char *UB_VGA_drawRectangle(uint16_t x_lo,uint16_t y_lo,uint16_t x_rb, uint
 //Does not work so well in the y direction. Dont know why.
 const char *UB_VGA_drawEllipse(long xmp,long ymp,long x_radius, long y_radius, uint8_t color)
 {
-	 UB_VGA_SetPixel(xmp, ymp, color);
-	 long xLeft = xmp - x_radius;
-	 long xRight = xmp + x_radius;
-	 long yUp = ymp - y_radius;
-	 long yDown = ymp + y_radius;
-//
-//	 //squares x and y
-//	 long xsq = xmp * xmp;
-//	 long ysq = ymp * ymp;
-//	 //multiplies the values above by 2.
-//	 long twoxmpsq = 2 * xsq;
-//	 long twoympsq = 2 * ysq;
-//
-//	 long x = 0;
-//	 long y = ymp;
-//	 //no clue what d1 is
-//	 long d1 = ysq - ysq * ymp +(0.25 * xsq);
-//	 long d2;
-//	 long dx = twoympsq * x;
-//	 long dy = twoxmpsq * y;
-//
-//	 do
-//	 {
-//		 UB_VGA_SetPixel(xmp, ymp, color);
-//		 UB_VGA_SetPixel(xmp, ymp, color);
-//		 UB_VGA_SetPixel(xmp, ymp, color);
-//		 UB_VGA_SetPixel(xmp, ymp, color);
-//	 }while(y > 0);
-//http://www.studentcpu.com/2010/07/write-source-code-mid-point-ellipse.html
+	char * error;
 
+
+
+	//checks for incorrect color
+	if (color < 0)
+		error = "color can't be negative";
 	 int x,y;
 	 float d1,d2,dx,dy, rxpsq, rypsq;
 	 x = 0;
@@ -177,12 +180,7 @@ const char *UB_VGA_drawEllipse(long xmp,long ymp,long x_radius, long y_radius, u
 
 //http://ankurm.com/implementing-midpoint-ellipse-algorithm-in-c/
 
-	 UB_VGA_SetPixel(xLeft, ymp, VGA_COL_BLUE);
-	 UB_VGA_SetPixel(xRight, ymp, VGA_COL_GREEN);
-	 UB_VGA_SetPixel(xmp, yUp, VGA_COL_WHITE);
-	 UB_VGA_SetPixel(xmp, yDown, VGA_COL_YELLOW);
-
-
+return error;
 }
 
 
@@ -190,6 +188,23 @@ const char *UB_VGA_drawEllipse(long xmp,long ymp,long x_radius, long y_radius, u
 
 void setFourPixels(uint16_t xs, uint16_t ys, uint16_t x, uint16_t y, uint8_t color)
 {
+//	UB_VGA_drawLine(xs + x, ys + y ,xs - x, ys - y,1, color);
+//
+//	UB_VGA_drawLine(xs + x, ys + y ,xs - x, ys + y,1, color);
+
+
+	///////////////////////////////kinda works///////////////////
+	UB_VGA_drawLine(xs - x ,ys - y ,xs + x, ys + y,1, color);
+	///////////////////////////////kinda works///////////////////
+	UB_VGA_drawLine(xs - x ,ys - y ,xs + x, ys - y,1, color);
+	///////////////////////////////kinda works///////////////////
+	UB_VGA_drawLine(xs + x ,ys - y ,xs + x, ys + y,1, color);
+
+	UB_VGA_drawLine(xs - x ,ys - y ,xs - x, ys + y,1, color);
+
+
+
+
 	UB_VGA_SetPixel(xs + x, ys + y, color);
 	UB_VGA_SetPixel(xs - x, ys - y, color);
 	UB_VGA_SetPixel(xs + x, ys - y, color);

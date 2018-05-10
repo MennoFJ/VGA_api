@@ -35,9 +35,13 @@ int main(void)
 			UB_VGA_drawLine(50,50 ,90,j, 3, VGA_COL_RED);
 
 	UB_VGA_drawRectangle(10,100,90, 50, VGA_COL_RED);
+	UB_VGA_drawRectangle(20,90,80, 60, VGA_COL_BLUE);
 
-	UB_VGA_drawEllipse(150, 150, 20, 40, VGA_COL_RED);
+	UB_VGA_drawEllipse(150, 150, 40, 80, VGA_COL_BLUE);
+	UB_VGA_drawEllipse(150, 150, 40, 40, VGA_COL_WHITE);
 
+	UB_VGA_drawRectangle(200,190,300, 110, VGA_COL_CYAN);
+	UB_VGA_drawEllipse(250, 150, 40, 40, VGA_COL_WHITE);
 
 
   while(1)

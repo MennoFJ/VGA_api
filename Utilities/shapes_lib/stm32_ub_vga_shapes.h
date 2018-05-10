@@ -30,6 +30,7 @@
 #define  VGA_COL_GREEN          0x1C
 #define  VGA_COL_RED            0xE0
 #define  VGA_COL_WHITE          0xFF
+
 #define  VGA_COL_CYAN           0x1F
 #define  VGA_COL_MAGENTA        0xE3
 #define  VGA_COL_YELLOW         0xFC
@@ -40,7 +41,7 @@
 //--------------------------------------------------------------
 
 
-const char *UB_VGA_drawLine(uint16_t x_start,uint16_t y_start,uint16_t x_stop, uint16_t y_stop,uint8_t width , uint8_t color);
+const char *UB_VGA_drawLine(uint16_t x_start,uint16_t y_start,uint16_t x_stop, uint16_t y_stop, uint8_t color, uint8_t width);
 const char *UB_VGA_drawEllipse(long xmp,long ymp,long x_radius, long y_radius, uint8_t color);
 const char *UB_VGA_drawRectangle(uint16_t x_lo,uint16_t y_lo,uint16_t x_rb, uint16_t y_rb, uint8_t color);
 const char *UB_VGA_drawTraingle(uint16_t x_one,uint16_t y_one,uint16_t x_two, uint16_t y_two ,uint16_t x_tree, uint16_t y_tree, uint8_t color);
@@ -50,7 +51,6 @@ const char *UB_VGA_setBitmap(uint8_t img_number,uint16_t x_start, uint16_t y_sta
 const char *UB_VGA_clearscreen(uint8_t color);
 const char *UB_VGA_FillScreen(uint8_t color);
 const char *UB_VGA_SetPixel(uint16_t xp, uint16_t yp, uint8_t color);
-void setFourPixels(uint16_t xs, uint16_t ys, uint16_t x, uint16_t y, uint8_t color);
 
 
 
