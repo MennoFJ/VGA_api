@@ -1,4 +1,6 @@
 
 *.o
+*.elf
+*.list
 
 \.settings/language\.settings\.xml
