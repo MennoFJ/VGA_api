@@ -57,9 +57,8 @@ const char plotLineLow(int16_t x_stop, int16_t y_stop, int16_t x_start,int16_t y
 const char plotLineHigh(int16_t x_stop, int16_t y_stop, int16_t x_start,int16_t y_start, uint8_t color);
 
 const char *UB_VGA_drawTriangleLine(int16_t x_start,int16_t y_start,int16_t x_stop, int16_t y_stop, uint8_t color);
-const char plotTriangleLineLow(int16_t x_start,int16_t y_start, int16_t x_stop,int16_t y_stop,uint8_t color);
-const char plotTriangleLineHigh(int16_t x_start,int16_t y_start, int16_t x_stop, int16_t y_stop, uint8_t color);
-
+const char plotTriangleLineLow(int16_t start_point_x,uint16_t start_point_y, int16_t x_start,int16_t y_start, int16_t x_stop,int16_t y_stop,uint8_t color);
+const char plotTriangleLineHigh(int16_t start_point_x,uint16_t start_point_y, int16_t x_start,int16_t y_start, int16_t x_stop, int16_t y_stop, uint8_t color);
 
 
 //--------------------------------------------------------------

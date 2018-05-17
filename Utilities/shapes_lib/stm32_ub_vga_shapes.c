@@ -239,7 +239,8 @@ return error;
 const char *UB_VGA_drawTriangle(uint16_t x_one,uint16_t y_one,uint16_t x_two, uint16_t y_two ,uint16_t x_tree, uint16_t y_tree, uint8_t color)
 {
 	UB_VGA_drawTriangleLine(x_one, y_one, x_two, y_two, color);
-
+	UB_VGA_drawTriangleLine(x_one, y_one, x_tree, y_tree, color);
+	UB_VGA_drawTriangleLine(x_two, y_two, x_tree, y_tree, color);
 	UB_VGA_SetPixel(x_one, y_one, VGA_COL_WHITE);
 	UB_VGA_SetPixel(x_two, y_two, VGA_COL_WHITE);
 	UB_VGA_SetPixel(x_tree, y_tree, VGA_COL_WHITE);
@@ -266,28 +267,24 @@ const char *UB_VGA_drawTriangleLine(int16_t x_start,int16_t y_start,int16_t x_st
 		error = "line out of bounds";
 
 	//checks for incorrect line width.
-	if(width < 0 || width > VGA_DISPLAY_Y )
-		error = "incorrect line width";
-	if(width == 0)
-		return;
 	if(abs(y_stop - y_start) < abs(x_stop - x_start))
 	{
 		if(x_start > x_stop)
-			plotTraingleLineLow(x_stop, y_stop, x_start, y_start, color);
+			plotTriangleLineLow(x_stop, y_stop, x_stop, y_stop, x_start, y_start, color);
 		else
-			plotTriangleLineLow(x_start, y_start, x_stop, y_stop, color);
+			plotTriangleLineLow(x_stop, y_stop, x_start, y_start, x_stop, y_stop, color);
 	}
 	else
 	{
 
 		if(y_start > y_stop)
-			plotTriangleLineHigh(x_stop, y_stop, x_start, y_start, color);
+			plotTriangleLineHigh(x_stop, y_stop, x_stop, y_stop, x_start, y_start, color);
 		else
-			plotTriangleLineHigh(x_start, y_start, x_stop, y_stop, color);
+			plotTriangleLineHigh(x_stop, y_stop, x_start, y_start, x_stop, y_stop, color);
 	}
 }
 
-const char plotTriangleLineLow(int16_t start_point, int16_t x_start,int16_t y_start, int16_t x_stop,int16_t y_stop,uint8_t color)
+const char plotTriangleLineLow(int16_t start_point_x,uint16_t start_point_y, int16_t x_start,int16_t y_start, int16_t x_stop,int16_t y_stop,uint8_t color)
 {
 	int16_t dx = x_stop - x_start;
 	int16_t dy = y_stop - y_start;
@@ -304,6 +301,7 @@ const char plotTriangleLineLow(int16_t start_point, int16_t x_start,int16_t y_st
 	for (x = x_start; x<= x_stop; x++)
 	{
 		UB_VGA_SetPixel(x, y, color);
+		UB_VGA_drawLine(start_point_x, start_point_y , start_point_x, y,1, color);
 		if(D > 0)
 
 		{
@@ -315,7 +313,7 @@ const char plotTriangleLineLow(int16_t start_point, int16_t x_start,int16_t y_st
 	}
 }
 
-const char plotTriangleLineHigh(int16_t start_point, int16_t x_start,int16_t y_start, int16_t x_stop, int16_t y_stop, uint8_t color)
+const char plotTriangleLineHigh(int16_t start_point_x,uint16_t start_point_y, int16_t x_start,int16_t y_start, int16_t x_stop, int16_t y_stop, uint8_t color)
 {
 	int16_t dx = x_stop - x_start;
 	int16_t dy = y_stop - y_start;
@@ -334,6 +332,7 @@ const char plotTriangleLineHigh(int16_t start_point, int16_t x_start,int16_t y_s
 	for(y = y_start ; y <= y_stop; y ++)
 	{
 		UB_VGA_SetPixel(x, y, color);
+		UB_VGA_drawLine(start_point_x, start_point_y , x, start_point_y,1, color);
 		if (D > 0)
 		{
 			x = x + xi;

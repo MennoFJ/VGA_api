@@ -63,7 +63,7 @@ int main(void)
 //	UB_VGA_drawEllipse(250, 150, 50, 50, VGA_COL_WHITE);
 
 	UB_VGA_drawTriangle(120, 100, 150, 70, 180, 100, VGA_COL_RED);
-	//UB_VGA_drawTriangle(120, 100, 150, 30, 180, 100, VGA_COL_RED);
+	UB_VGA_drawTriangle(120, 100, 120, 30, 180, 100, VGA_COL_RED);
 
 	//Testing line width
 	//UB_VGA_drawLine(120,100 ,150, 30, 3, VGA_COL_WHITE);
