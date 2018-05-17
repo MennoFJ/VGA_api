@@ -1,6 +1,8 @@
 stm32_ub_vga_shapes.c:33:13:UB_VGA_SetPixel	24	static
 stm32_ub_vga_shapes.c:55:13:UB_VGA_drawLine	40	static
-stm32_ub_vga_shapes.c:97:13:UB_VGA_drawRectangle	48	static
-stm32_ub_vga_shapes.c:123:13:UB_VGA_drawEllipse	88	static
-stm32_ub_vga_shapes.c:189:6:setFourPixels	32	static
-stm32_ub_vga_shapes.c:218:13:UB_VGA_FillScreen	24	static
+stm32_ub_vga_shapes.c:101:12:plotLineLow	40	static
+stm32_ub_vga_shapes.c:129:12:plotLineHigh	40	static
+stm32_ub_vga_shapes.c:164:13:UB_VGA_drawRectangle	48	static
+stm32_ub_vga_shapes.c:189:13:UB_VGA_drawEllipse	64	static
+stm32_ub_vga_shapes.c:235:13:UB_VGA_drawTriangle	72	static
+stm32_ub_vga_shapes.c:293:13:UB_VGA_FillScreen	24	static
