@@ -10,19 +10,31 @@
 // Function : VGA_core DMA LIB 320x240, 8bit color
 //--------------------------------------------------------------
 
-#include "main.h"
+//#include "main.h"
+#include "stm32f4xx.h"
+#include "stm32f4xx_gpio.h"
+#include "stm32f4xx_usart.h"
 #include <math.h>
+#include <string.h>
 #include "stm32_ub_vga_shapes.h"
 #include "stm32_ub_vga_IO.h"
+#include "uart.h"
+#include "delay.h"
+
+
 
 int main(void)
 {
 
-
+	char *c = "hallo";
 	//  uint32_t n;
 	SystemInit(); // System speed to 168MHz
 
 	UB_VGA_Screen_Init(); // Init VGA-Screen
+	DELAY_init();
+
+	UART_init();
+	UART_INT_init();
 
 
 	UB_VGA_FillScreen(VGA_COL_BLACK);
@@ -37,10 +49,10 @@ int main(void)
 	UB_VGA_drawRectangle(10,100,90, 50, VGA_COL_RED);
 
 
-
   while(1)
   {
-	  // put the code here
+		DELAY_s(5);
+		UART_printf(256,c);
   }
 }
 
