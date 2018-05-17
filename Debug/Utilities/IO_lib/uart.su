@@ -1,8 +1,8 @@
 uart.c:5:6:RCC_Configuration	8	static
-uart.c:20:6:GPIO_Configuration	16	static
-uart.c:40:6:USART2_Configuration	24	static
-uart.c:71:6:DMA_Configuration	72	static
-uart.c:140:6:DMA1_Stream6_IRQHandler	8	static
-uart.c:152:6:DMA1_Stream5_IRQHandler	8	static
-uart.c:164:6:NVIC_Configuration	16	static
-uart.c:186:12:UART_printf	60	dynamic
+uart.c:22:6:GPIO_Configuration	16	static
+uart.c:42:6:USART2_Configuration	24	static
+uart.c:71:6:NVIC_Configuration	16	static
+uart.c:96:6:DMA_Configuration	72	static
+uart.c:166:6:DMA1_Stream6_IRQHandler	16	static
+uart.c:194:6:DMA1_Stream5_IRQHandler	8	static
+uart.c:209:6:UART_printf	16	static

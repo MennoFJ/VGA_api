@@ -17,21 +17,18 @@ int main(void)
 {
 
 
-	char *functionality = "ARM-board \r";		// Showed on UART3 at startup
-
 	SystemInit(); // System speed to 168MHz
 
-	  RCC_Configuration();
+	RCC_Configuration();
 
-	  NVIC_Configuration();
+	NVIC_Configuration();
 
-	  GPIO_Configuration();
+	GPIO_Configuration();
 
-	  USART2_Configuration();
+	USART2_Configuration();
 
-	  DMA_Configuration();
+	DMA_Configuration();
 
-	UART_printf(256,functionality);
 
 	UB_VGA_Screen_Init(); // Init VGA-Screen
 
@@ -43,25 +40,18 @@ int main(void)
 	for(i=10; i < 51; i++)
 		UB_VGA_drawLine(10,i ,50, 50, VGA_COL_RED, 3);
 	int j;
-		for(j=10; j < 51; j++)
-			UB_VGA_drawLine(50,50 ,90,j, VGA_COL_RED, 3);
+	for(j=10; j < 51; j++)
+		UB_VGA_drawLine(50,50 ,90,j, VGA_COL_RED, 3);
 
 	UB_VGA_drawRectangle(10,100,90, 50, VGA_COL_RED);
 
+	UART_printf("ARM-board \n");
 
 
-  while(1)
-  {
-//	        /**
-//	         * Loop data back to UART data register
-//	         */
-//	        while (Read != Write) {                 /* Do it until buffer is empty */
-//	            USART2->DR = UART_Buffer[Read++];   /* Start byte transfer */
-//	            while (!(USART2->SR & USART_SR_TXE));   /* Wait till finished */
-//	            if (Read == UART_BUFFER_SIZE) {     /* Check buffer overflow */
-//	                Read = 0;
-//	            }
-//	        }
-  }
+
+	while(1)
+	{
+		UART_printf("lol \r");
+	}
 }
 

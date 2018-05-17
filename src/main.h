@@ -45,10 +45,10 @@
 #endif
 
 
-#define		LED1		GPIOD, GPIO_Pin_12
-#define		LED2		GPIOD, GPIO_Pin_13
-#define		LED3		GPIOD, GPIO_Pin_14
-#define		LED4		GPIOD, GPIO_Pin_15
+//#define		LED1		GPIOD, GPIO_Pin_12
+//#define		LED2		GPIOD, GPIO_Pin_13
+//#define		LED3		GPIOD, GPIO_Pin_14
+//#define		LED4		GPIOD, GPIO_Pin_15
 
 
 //--------------------------------------------------------------
