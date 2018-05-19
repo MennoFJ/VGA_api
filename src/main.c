@@ -21,13 +21,13 @@
 #include "uart.h"
 #include "delay.h"
 
-
+extern char string[];
 
 int main(void)
 {
 
-	char *c = "hallo";
-	//  uint32_t n;
+	//	char *c = "hallo";
+
 	SystemInit(); // System speed to 168MHz
 
 	UB_VGA_Screen_Init(); // Init VGA-Screen
@@ -43,16 +43,20 @@ int main(void)
 	for(i=10; i < 51; i++)
 		UB_VGA_drawLine(10,i ,50, 50, VGA_COL_RED, 3);
 	int j;
-		for(j=10; j < 51; j++)
-			UB_VGA_drawLine(50,50 ,90,j, VGA_COL_RED, 3);
+	for(j=10; j < 51; j++)
+		UB_VGA_drawLine(50,50 ,90,j, VGA_COL_RED, 3);
 
 	UB_VGA_drawRectangle(10,100,90, 50, VGA_COL_RED);
 
 
-  while(1)
-  {
-		DELAY_s(5);
-		UART_printf(256,c);
-  }
+	while(1)
+	{
+
+		DELAY_s(2);
+		UART_printf(256,string, '\n');
+
+
+
+	}
 }
 

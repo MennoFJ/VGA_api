@@ -1,4 +1,4 @@
 uart.c:34:6:UART_init	32	static
 uart.c:85:6:UART_INT_init	16	static
 uart.c:99:6:USART2_IRQHandler	16	static
-uart.c:136:12:UART_printf	60	dynamic
+uart.c:132:12:UART_printf	60	dynamic

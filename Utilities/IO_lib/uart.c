@@ -102,24 +102,20 @@ void USART2_IRQHandler(void)
  * in an global or something can be done here.
  */
 {
+	if ( charcounter == 0 )
+		memset(string, 0, sizeof string);
+
 	// check if the USART2 receive interrupt flag was set
 	if( USART_GetITStatus(USART2, USART_IT_RXNE))
 	{
 		USART_ClearITPendingBit(USART2, USART_IT_RXNE);
-		int i;
 		char c = USART2->DR & 0xFF;
 
 		if(c > 64 && c < 91)
 			c += 32;
 		if(c <= 13)
 		{
-			for(i=0;i<charcounter;i++)
-			{
-				USART_SendData(USART2, string[i]); // Echo Char
-//				morse(string[i]);
-			}
 			charcounter = 0;
-			USART_SendData(USART2, c); // Echo Char
 		}
 		else
 		{
