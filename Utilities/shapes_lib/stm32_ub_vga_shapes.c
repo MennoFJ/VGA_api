@@ -20,27 +20,25 @@
 // Includes
 //--------------------------------------------------------------
 #include "stm32_ub_vga_shapes.h"
+#include "Bfont.h"
 
 
-
-//internal functions
 uint16_t readPixel(uint16_t xp, uint16_t yp);
+//internal functions
 uint16_t scanline(uint16_t x_start, uint16_t x_stop, uint16_t y,uint8_t first_number , uint8_t second_number,  uint8_t color);
-
 //--------------------------------------------------------------
 // put one Pixel on the screen with one color
 // Important : the last Pixel+1 from every line must be black (don't know why??)
 //--------------------------------------------------------------
 const char *UB_VGA_SetPixel(uint16_t xp, uint16_t yp, uint8_t color)
 {
-	char *error = "no errors";
-  if(xp>=VGA_DISPLAY_X) xp=0;
-  if(yp>=VGA_DISPLAY_Y) yp=0;
+	if(xp>=VGA_DISPLAY_X) xp=0;
+	if(yp>=VGA_DISPLAY_Y) yp=0;
 
-  // Write pixel to ram
-  VGA_RAM1[(yp*(VGA_DISPLAY_X+1))+xp]=color;
-  //test return
-  return error;
+	// Write pixel to ram
+	VGA_RAM1[(yp*(VGA_DISPLAY_X+1))+xp]=color;
+	//test return
+	return "no errors \n";
 }
 
 
@@ -400,12 +398,53 @@ uint16_t readPixel(uint16_t xp, uint16_t yp)
 //@TODO:add errors.
 const char *UB_VGA_FillScreen(uint8_t color)
 {
-  uint16_t xp,yp;
+	uint16_t xp,yp;
 
-  for(yp=0;yp<VGA_DISPLAY_Y;yp++) {
-    for(xp=0;xp<VGA_DISPLAY_X;xp++) {
-      UB_VGA_SetPixel(xp,yp,color);
-    }
-  }
-  return "no errors \n";
+	for(yp=0;yp<VGA_DISPLAY_Y;yp++) {
+		for(xp=0;xp<VGA_DISPLAY_X;xp++) {
+			UB_VGA_SetPixel(xp,yp,color);
+		}
+	}
+	return "no errors \n";
+}
+
+
+const char *Draw_Bitmap(uint8_t *image,uint16_t xp, uint16_t yp)
+{
+	uint8_t x, y;
+
+	for (y = 0; y < 48; y++) {
+		for (x = 0; x < 48; x++) {
+			UB_VGA_SetPixel(x+xp, y+yp, *(image)++);
+		}
+	}
+	return "no errors \n";
+}
+
+
+void Draw_Text(uint16_t x0, uint16_t y0, uint8_t *text, uint8_t color)
+{
+	uint8_t x, y, i, j = 0;
+	uint8_t bitmap[8];
+
+	while (*text != '\0')
+	{
+		for (i = 0; i < 8; i++)
+			bitmap[i] = font[*text][i];
+
+		for (y = 0; y < 8; y++) {
+			for (x = 0; x < 8; x++) {
+				if ((bitmap[y] >> x) & 1)
+					UB_VGA_SetPixel(x + x0 + j * 8, y + y0, color);
+			}
+			if (x + x0 + j * 8 >= 310)
+			{
+				x0  = 10;
+				y0 += 20;
+				j 	=  0;
+			}
+		}
+		j++;
+		*text++;
+	}
 }
