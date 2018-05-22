@@ -20,13 +20,17 @@
 #include "stm32_ub_vga_IO.h"
 #include "uart.h"
 #include "delay.h"
+#include "bitmap.h"
+//#include <Bfont.h>
+
 
 extern char string[];
+
 
 int main(void)
 {
 
-	//	char *c = "hallo";
+	char *c = "jooo maat alles goed met mij wel ja echt jajajajajajajajajajaja";
 
 	SystemInit(); // System speed to 168MHz
 
@@ -37,17 +41,20 @@ int main(void)
 	UART_INT_init();
 
 
-	UB_VGA_FillScreen(VGA_COL_BLACK);
+	UB_VGA_FillScreen(VGA_COL_GREEN);
 	//demo code to show lines work from every angle in both directions.
-	int i;
-	for(i=10; i < 51; i++)
-		UB_VGA_drawLine(10,i ,50, 50, VGA_COL_RED, 3);
-	int j;
-	for(j=10; j < 51; j++)
-		UB_VGA_drawLine(50,50 ,90,j, VGA_COL_RED, 3);
-
+//	int i;
+//	for(i=10; i < 51; i++)
+//		UB_VGA_drawLine(10,i ,50, 50, VGA_COL_RED, 3);
+//	int j;
+//	for(j=10; j < 51; j++)
+//		UB_VGA_drawLine(50,50 ,90,j, VGA_COL_RED, 3);
+//
 	UB_VGA_drawRectangle(10,100,90, 50, VGA_COL_RED);
 
+	Draw_Bitmap(&fuck[0], 100, 100);
+
+	Draw_Text(200, 200, (uint8_t*)c, 0x00);
 
 	while(1)
 	{

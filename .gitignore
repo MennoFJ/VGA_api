@@ -6,3 +6,4 @@
 \.settings/language\.settings\.xml
 
 *.map
+/Debug/
