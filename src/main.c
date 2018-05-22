@@ -29,14 +29,82 @@ int main(void)
 	//demo code to show lines work from every angle in both directions.
 	int i;
 	for(i=10; i < 51; i++)
-		UB_VGA_drawLine(10,i ,50, 50, VGA_COL_RED, 3);
+		UB_VGA_drawLine(10,i ,50, 50, 1, VGA_COL_RED);
 	int j;
 		for(j=10; j < 51; j++)
-			UB_VGA_drawLine(50,50 ,90,j, VGA_COL_RED, 3);
+			UB_VGA_drawLine(50,50 ,90,j, 1, VGA_COL_RED);
+	//0 deg to with width 3
+	UB_VGA_drawLine(50,10 ,50, 50, 3, VGA_COL_RED);
+	UB_VGA_drawLine(50,10 ,50, 50, 1, VGA_COL_WHITE);
 
-	UB_VGA_drawRectangle(10,100,90, 50, VGA_COL_RED);
+	//45 deg with width 3
+	UB_VGA_drawLine(50,50 ,90,10, 3, VGA_COL_BLUE);
+	UB_VGA_drawLine(10,10 ,50, 50, 3, VGA_COL_BLUE);
+
+	//45 deg with width 1
+	UB_VGA_drawLine(50,50 ,90,10, 1, VGA_COL_RED);
+	UB_VGA_drawLine(10,10 ,50, 50, 1, VGA_COL_RED);
 
 
+	//90 degrees
+	UB_VGA_drawLine(100,200 ,200,200, 5, VGA_COL_BLUE);
+	UB_VGA_drawLine(100,200 ,200, 200, 1, VGA_COL_RED);
+	//UB_VGA_drawLine(10,9 ,50, 50, 3, VGA_COL_WHITE);
+
+
+	//UB_VGA_drawLine(50,150 ,90,200, 3, VGA_COL_RED);
+
+
+
+//
+//	UB_VGA_drawEllipse(150, 150, 40, 80, VGA_COL_BLUE);
+//	UB_VGA_drawEllipse(50, 150, 40, 40, VGA_COL_WHITE);
+//	UB_VGA_drawEllipse(50, 150, 40, 40, VGA_COL_WHITE);
+//
+//
+//	UB_VGA_drawRectangle(200,190,300, 110, VGA_COL_CYAN);
+//	UB_VGA_drawEllipse(150, 150, 40, 80, VGA_COL_BLUE);
+//
+//	UB_VGA_drawRectangle(200,190,300, 110, VGA_COL_CYAN);
+//	UB_VGA_drawRectangle(20,90,80, 60, VGA_COL_BLUE);
+//
+//
+//	UB_VGA_drawEllipse(150, 150, 40, 80, VGA_COL_BLUE);
+//	//UB_VGA_drawEllipse(150, 150, 80, 80, VGA_COL_BLUE);
+//	UB_VGA_drawEllipse(250, 150, 50, 50, VGA_COL_WHITE);
+
+	UB_VGA_drawTriangle(120, 100, 150, 70, 180, 100, VGA_COL_RED);
+	UB_VGA_drawTriangle(190, 100, 190, 30, 230, 100, VGA_COL_RED);
+	UB_VGA_drawTriangle(240, 100, 300, 100, 240, 150, VGA_COL_RED);
+
+
+
+	UB_VGA_drawTriangle(100, 160, 130, 170, 230, 110, VGA_COL_RED);
+
+	//90 deg with width 3
+	//UB_VGA_drawLine(10,50 ,50, 50, 6, VGA_COL_BLUE);
+
+//	UB_VGA_drawRectangle(10,100,90, 50, VGA_COL_RED);
+//	UB_VGA_drawRectangle(20,90,80, 60, VGA_COL_BLUE);
+//
+//	UB_VGA_drawEllipse(150, 150, 40, 80, VGA_COL_BLUE);
+//	UB_VGA_drawEllipse(150, 150, 40, 40, VGA_COL_WHITE);
+//
+//	UB_VGA_drawRectangle(200,190,300, 110, VGA_COL_CYAN);
+//	UB_VGA_drawEllipse(250, 150, 40, 40, VGA_COL_WHITE);
+
+	//UB_VGA_drawEllipse(200, 200, 30, 40, VGA_COL_BLUE);
+	UB_VGA_drawEllipse(300, 300, 40, 30, VGA_COL_WHITE);
+
+	//Testing line width
+	//UB_VGA_drawLine(120,100 ,150, 30, 3, VGA_COL_WHITE);
+//	UB_VGA_drawLine(155,30 ,120, 100, 3, VGA_COL_WHITE);
+//	UB_VGA_drawLine(155,100 ,120, 30, 3, VGA_COL_WHITE);
+//	int k;
+//
+//	UB_VGA_drawLine(200,30 ,200, 100, 3, VGA_COL_WHITE);
+//	UB_VGA_drawLine(120,100 ,150, 100, 3, VGA_COL_WHITE);
+//	UB_VGA_drawLine(140,100 ,150, 30, 3, VGA_COL_WHITE);
 
   while(1)
   {

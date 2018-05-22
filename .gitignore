@@ -6,3 +6,5 @@
 \.settings/language\.settings\.xml
 
 *.map
+
+Debug/Utilities/shapes_lib/stm32_ub_vga_shapes\.su
