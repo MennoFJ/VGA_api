@@ -293,9 +293,9 @@ uint8_t UB_VGA_drawTriangle(uint16_t x_one,uint16_t y_one,uint16_t x_two, uint16
 		if (color < 0 ||color > 256 )
 			error = 2;
 	//draws the outline of the triangle.
-	UB_VGA_drawLine(x_one, y_one, x_two, y_two,1, color);
-	UB_VGA_drawLine(x_one, y_one, x_tree, y_tree,1, color);
-	UB_VGA_drawLine(x_two, y_two, x_tree, y_tree,1, color);
+	UB_VGA_drawLine(x_one, y_one, x_two, y_two,1, 1);
+	UB_VGA_drawLine(x_one, y_one, x_tree, y_tree,1, 1);
+	UB_VGA_drawLine(x_two, y_two, x_tree, y_tree,1, 1);
 
 	//checks for the largest y
 	if(y_one >= y_two && y_one >= y_tree)
@@ -325,8 +325,6 @@ uint8_t UB_VGA_drawTriangle(uint16_t x_one,uint16_t y_one,uint16_t x_two, uint16
 		smallest_x = x_two;
 	else
 		smallest_x =x_tree;
-
-
 	y_plus = largest_y;
 
 	for(y = smallest_y +1; y < largest_y; y++)
@@ -338,7 +336,7 @@ uint8_t UB_VGA_drawTriangle(uint16_t x_one,uint16_t y_one,uint16_t x_two, uint16
 		x_overflowCounter = 0;
 		previous_xplus = 0;
 		previous_x = 0;
-		number_of_patterns = scanline(smallest_x, largest_x, y, 0 , 1, color);
+		number_of_patterns = scanline(smallest_x, largest_x, y, 0 , 1, 1);
 		//not sure if this works correct
 			if(number_of_patterns < 2)
 				continue;
@@ -348,7 +346,7 @@ uint8_t UB_VGA_drawTriangle(uint16_t x_one,uint16_t y_one,uint16_t x_two, uint16
 
 			if (x_overflowCounter > largest_x * 2)
 				break;
-			if(readPixel(x,y) == color)
+			if(readPixel(x,y) == 1)
 				current_x = 1;
 			else
 				current_x = 0;
@@ -361,7 +359,7 @@ uint8_t UB_VGA_drawTriangle(uint16_t x_one,uint16_t y_one,uint16_t x_two, uint16
 			x++;
 			previous_x = current_x;
 
-			if(readPixel(x_plus,y) == color)
+			if(readPixel(x_plus,y) == 1)
 				current_xplus = 1;
 			else
 				current_xplus = 0;
@@ -381,6 +379,9 @@ uint8_t UB_VGA_drawTriangle(uint16_t x_one,uint16_t y_one,uint16_t x_two, uint16
 		}
 
 	}
+	UB_VGA_drawLine(x_one, y_one, x_two, y_two,1, color);
+	UB_VGA_drawLine(x_one, y_one, x_tree, y_tree,1, color);
+	UB_VGA_drawLine(x_two, y_two, x_tree, y_tree,1, color);
 	return error;
 
 }

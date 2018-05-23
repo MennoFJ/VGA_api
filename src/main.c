@@ -68,12 +68,21 @@ int main(void)
 
 	//90 degrees
 	UB_VGA_drawLine(100,200 ,200,200, 5, VGA_COL_BLUE);
+	UB_VGA_drawRectangle(10,10,30, 20, VGA_COL_BLUE);
+	UB_VGA_drawRectangle(100,100,130, 120, VGA_COL_BLUE);
 	//UB_VGA_drawLine(10,9 ,50, 50, 3, VGA_COL_WHITE);
 	//UB_VGA_drawTriangle(10,10,50, 50,25, 100, VGA_COL_WHITE);
 	//UB_VGA_drawTriangle(100,100,50, 50,25, 100, VGA_COL_BLUE);
 	//UB_VGA_drawTriangle(10,10,50, 50,25, 100, VGA_COL_BLUE);
-	UB_VGA_drawRectangle(10,10,30, 20, VGA_COL_BLUE);
-	UB_VGA_drawRectangle(100,100,130, 120, VGA_COL_BLUE);
+	//UB_VGA_drawTriangle(10,10,130, 120,240, 200, VGA_COL_WHITE);
+	//UB_VGA_drawTriangle(100,100,30, 20,250, 250, VGA_COL_MAGENTA);
+	//UB_VGA_drawTriangle(130,130,17, 12,333, 233, VGA_COL_YELLOW);
+	UB_VGA_drawTriangle(10,10,10, 100,100, 100, VGA_COL_WHITE);
+//	driehoek,10,10,130,120,240,200,wit
+//	driehoek,100,100,30,20,250,250,cyaan
+//	driehoek,130,130,17,12,333,233,groen
+
+
 	while(1)
 	{
 		//DELAY_ms(200);
