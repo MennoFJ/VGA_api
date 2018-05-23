@@ -37,6 +37,10 @@
 #define  VGA_COL_MAGENTA        0xE3
 #define  VGA_COL_YELLOW         0xFC
 
+#define CHAR_WIDTH 6
+#define CHAR_HEIGHT 8
+
+
 
 //--------------------------------------------------------------
 // Global Function call
@@ -53,8 +57,9 @@ const char *UB_VGA_setBitmap(uint8_t img_number,uint16_t x_start, uint16_t y_sta
 const char *UB_VGA_clearscreen(uint8_t color);
 const char *UB_VGA_FillScreen(uint8_t color);
 const char *UB_VGA_SetPixel(uint16_t xp, uint16_t yp, uint8_t color);
-const char *Draw_Bitmap(uint8_t *image,uint16_t xp, uint16_t yp);
-void Draw_Text(uint16_t x0, uint16_t y0, uint8_t *text, uint8_t color);
+const char *Draw_Bitmap(uint8_t nr,uint16_t xp, uint16_t yp);
+void Draw_Text(uint16_t x0, uint16_t y0, uint8_t *text, uint8_t color, char *Font);
+
 
 
 
