@@ -64,7 +64,7 @@ uint8_t UB_VGA_drawLine(uint16_t x_start,uint16_t y_start,uint16_t x_stop, uint1
 	if(x_start< 0 || x_stop < 0 || y_start < 0 || y_stop < 0
 			|| x_start > VGA_DISPLAY_X || x_stop > VGA_DISPLAY_X
 				|| y_start > VGA_DISPLAY_Y || y_stop > VGA_DISPLAY_Y)
-		error = "line out of bounds";
+		error = 1;
 	//checks for incorrect color.
 	if (color < 0 ||color > 256 )
 		error = 2;
@@ -174,7 +174,10 @@ void plotLineHigh(int16_t x_start,int16_t y_start, int16_t x_stop, int16_t y_sto
 uint8_t UB_VGA_drawRectangle(uint16_t x_lo,uint16_t y_lo,uint16_t x_rb, uint16_t y_rb, uint8_t color)
 {
 	uint8_t error = 0;
-	if(x_rb > x_lo)
+	uint16_t y_lb;
+	uint16_t temp_x;
+	uint16_t temp_y;
+
 	//checks for out of bounds errors
 	if(x_lo < 0 || y_lo < 0 || x_rb < 0 || y_rb< 0
 			|| x_lo > VGA_DISPLAY_X || x_rb> VGA_DISPLAY_X
@@ -183,12 +186,38 @@ uint8_t UB_VGA_drawRectangle(uint16_t x_lo,uint16_t y_lo,uint16_t x_rb, uint16_t
 
 
 	//checks for incorrect color.
-		if (color < 0 ||color > 256 )
-			error = 2;
+	if (color < 0 ||color > 256 )
+		error = 2;
 	//mirrors the points x/y_lo and x/y_rb.
-	uint16_t y_lb = y_rb;
+	if(x_rb < x_lo)
+	{
+		temp_x = x_rb;
+		x_rb = x_lo;
+		x_lo = x_rb;
+	}
+	if(y_rb < y_lo)
+	{
+		y_lb = y_rb;
+	}
+	else
+	{
+		y_lb = y_lo;
+		temp_y = y_lo;
+		y_lo = y_rb;
+		y_rb = y_lo;
+
+	}
+
+	//links onder wordt rechts boven
+	//uint16_t y_lb = y_rb; original
+
+
+
+
 	for(int i = y_lb; i < y_lo; i++)
 		UB_VGA_drawLine(x_lo, i ,x_rb, i, 1, color);
+
+
 	return error;
 }
 

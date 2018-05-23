@@ -69,13 +69,15 @@ int main(void)
 	//90 degrees
 	UB_VGA_drawLine(100,200 ,200,200, 5, VGA_COL_BLUE);
 	//UB_VGA_drawLine(10,9 ,50, 50, 3, VGA_COL_WHITE);
-	UB_VGA_drawTriangle(10,10,50, 50,25, 100, VGA_COL_WHITE);
+	//UB_VGA_drawTriangle(10,10,50, 50,25, 100, VGA_COL_WHITE);
 	//UB_VGA_drawTriangle(100,100,50, 50,25, 100, VGA_COL_BLUE);
 	//UB_VGA_drawTriangle(10,10,50, 50,25, 100, VGA_COL_BLUE);
+	UB_VGA_drawRectangle(10,10,30, 20, VGA_COL_BLUE);
+	UB_VGA_drawRectangle(100,100,130, 120, VGA_COL_BLUE);
 	while(1)
 	{
-		DELAY_ms(200);
-		UART_printf(256,string, '\n');
+		//DELAY_ms(200);
+		//UART_printf(256,string, '\n');
 	}
 }
 
