@@ -48,8 +48,9 @@ int main(void)
 	for(i=10; i < 51; i++)
 		UB_VGA_drawLine(10,i ,50, 50, 1, VGA_COL_RED);
 	int j;
-			UB_VGA_drawLine(50,50 ,90,j, 1, VGA_COL_RED);
-		for(j=10; j < 51; j++)
+
+	for(j=10; j < 51; j++)
+		UB_VGA_drawLine(50,50 ,90,j, 1, VGA_COL_RED);
 	//0 deg to with width 3
 	UB_VGA_drawLine(50,10 ,50, 50, 1, VGA_COL_WHITE);
 	//45 deg with width 3
