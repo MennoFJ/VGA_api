@@ -55,8 +55,8 @@ int main(void)
 	UB_VGA_drawLine(50,10 ,50, 50, 1, VGA_COL_WHITE);
 	//45 deg with width 3
 
-	UB_VGA_drawLine(50,50 ,90,10, 3, VGA_COL_BLUE);
-	UB_VGA_drawLine(10,10 ,50, 50, 3, VGA_COL_BLUE);
+//	UB_VGA_drawLine(50,50 ,90,10, 3, VGA_COL_BLUE);
+//	UB_VGA_drawLine(10,10 ,50, 50, 3, VGA_COL_BLUE);
 	UB_VGA_drawRectangle(10,100,90, 50, VGA_COL_RED);
 
 	Draw_Bitmap(&fuck[0], 100, 100);
@@ -69,10 +69,12 @@ int main(void)
 	//90 degrees
 	UB_VGA_drawLine(100,200 ,200,200, 5, VGA_COL_BLUE);
 	//UB_VGA_drawLine(10,9 ,50, 50, 3, VGA_COL_WHITE);
-
+	UB_VGA_drawTriangle(10,10,50, 50,25, 100, VGA_COL_WHITE);
+	//UB_VGA_drawTriangle(100,100,50, 50,25, 100, VGA_COL_BLUE);
+	//UB_VGA_drawTriangle(10,10,50, 50,25, 100, VGA_COL_BLUE);
 	while(1)
 	{
-		DELAY_s(2);
+		DELAY_ms(200);
 		UART_printf(256,string, '\n');
 	}
 }

@@ -53,11 +53,6 @@ uint8_t UB_VGA_FillScreen(uint8_t color);
 uint8_t UB_VGA_SetPixel(uint16_t xp, uint16_t yp, uint8_t color);
 uint8_t Draw_Bitmap(uint8_t *image,uint16_t xp, uint16_t yp);
 uint8_t Draw_Text(uint16_t x0, uint16_t y0, uint8_t *text, uint8_t color);
-uint8_t plotLineLow(int16_t x_stop, int16_t y_stop, int16_t x_start,int16_t y_start, uint8_t color);
-uint8_t plotLineHigh(int16_t x_stop, int16_t y_stop, int16_t x_start,int16_t y_start, uint8_t color);
-uint8_t UB_VGA_drawTriangleLine(int16_t x_start,int16_t y_start,int16_t x_stop, int16_t y_stop, uint8_t color);
-uint8_t  plotTriangleLineLow(int16_t start_point_x,uint16_t start_point_y, int16_t x_start,int16_t y_start, int16_t x_stop,int16_t y_stop,uint8_t color);
-uint8_t plotTriangleLineHigh(int16_t start_point_x,uint16_t start_point_y, int16_t x_start,int16_t y_start, int16_t x_stop, int16_t y_stop, uint8_t color);
 
 
 //--------------------------------------------------------------
