@@ -120,13 +120,31 @@ int main(void)
 	wacht,1234
 	 */
 
-	UB_VGA_FillScreen(VGA_COL_BLUE);
-	UB_VGA_drawEllipse(200, -200, 30, 40, VGA_COL_BLACK);
-	UB_VGA_drawEllipse(300, 300, 40, 30, VGA_COL_RED);
-	UB_VGA_drawTriangle(10,10,130, 120,240, 2000, VGA_COL_WHITE);
-	UB_VGA_drawTriangle(10022,100,30, 20,250, 250, VGA_COL_BLACK);
-	//UB_VGA_drawTriangle(130,130,17, 14444,333, 233, VGA_COL_BLACK);
-	//Draw_Text(-10, 100, (uint8_t*)c, 0x00);
+	//90 degrees
+	UB_VGA_drawLine(100,200 ,200,200, 5, VGA_COL_BLUE);
+	UB_VGA_drawRectangle(10,10,30, 20, VGA_COL_BLUE);
+	UB_VGA_drawRectangle(100,100,130, 120, VGA_COL_BLUE);
+	//UB_VGA_drawLine(10,9 ,50, 50, 3, VGA_COL_WHITE);
+	//UB_VGA_drawTriangle(10,10,50, 50,25, 100, VGA_COL_WHITE);
+	//UB_VGA_drawTriangle(100,100,50, 50,25, 100, VGA_COL_BLUE);
+	//UB_VGA_drawTriangle(10,10,50, 50,25, 100, VGA_COL_BLUE);
+	UB_VGA_drawTriangle(10,10,130, 120,240, 200, VGA_COL_WHITE);
+	UB_VGA_drawTriangle(100,100,30, 20,250, 250, VGA_COL_MAGENTA);
+	UB_VGA_drawTriangle(130,130,17, 12,333, 233, VGA_COL_YELLOW);
+
+	UB_VGA_FillScreen(VGA_COL_RED);
+	UB_VGA_drawRectangle(10,10,300, 200, VGA_COL_BLACK);
+	UB_VGA_drawRectangle(10,10,30, 20, VGA_COL_BLUE);
+	UB_VGA_drawRectangle(100,100,130, 120, VGA_COL_GREEN);
+//	rechthoek,10,10,300,200,zwart
+//	rechthoek,10,10,30,20,blauw
+//	rechthoek,100,100,130,120,groen
+//
+
+	//UB_VGA_drawTriangle(10,10,10, 100,100, 100, VGA_COL_WHITE);
+	//driehoek,10,10,130,120,240,200,wit
+//	driehoek,100,100,30,20,250,250,cyaan
+//	driehoek,130,130,17,12,333,233,groen
 
 	//driehoek,10,10,130,120,240,200,2000,blauw
 
