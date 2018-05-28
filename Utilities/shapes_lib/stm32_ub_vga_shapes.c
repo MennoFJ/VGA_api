@@ -38,7 +38,7 @@ uint8_t UB_VGA_SetPixel(uint16_t xp, uint16_t yp, uint8_t color)
 	//checks for incorrect color.
 	if (color < 0 ||color > 256 )
 		error = 2;
-	if((xp>=VGA_DISPLAY_X )||(yp>=VGA_DISPLAY_Y))
+	if((xp>=VGA_DISPLAY_X )||(yp>=VGA_DISPLAY_Y) || xp < 0 || yp < 0)
 	{}
 	else
 		VGA_RAM1[(yp*(VGA_DISPLAY_X+1))+xp]=color;
@@ -79,8 +79,8 @@ uint8_t UB_VGA_drawLine(uint16_t x_start,uint16_t y_start,uint16_t x_stop, uint1
 	if(abs(y_stop - y_start) < abs(x_stop - x_start))
 		{
 			//not correct yet. Needs fixing
-			  y_start -= (width %2 == 0)? width/2: (width/2);
-			  y_stop -= (width %2 == 0)? width/2: (width/2);
+//			  y_start -=  width/2;
+//			  y_stop -= width/2;
 			while(width > 0)
 			{
 				if(x_start > x_stop)
@@ -94,18 +94,57 @@ uint8_t UB_VGA_drawLine(uint16_t x_start,uint16_t y_start,uint16_t x_stop, uint1
 		}
 		else
 		{
-			x_start -= (width %2 == 0)? width/2: (width/2);
-			x_stop -= (width %2 == 0)? width/2: (width/2);
-			while(width > 0)
-			{
 				if(y_start > y_stop)
-					plotLineHigh(x_stop, y_stop, x_start, y_start, color);
+				{
+					x_start	-= width/2;
+					x_stop	-= width/2;
+					if(x_start != x_stop)
+					{
+						y_start	-= width/2;
+						y_stop	-= width/2;
+					}
+					while(width > 0)
+					{
+						plotLineHigh(x_stop, y_stop, x_start, y_start, color);
+						width--;
+						x_start++;
+						x_stop++;
+						if(x_start != x_stop)
+						{
+							y_start++;
+							y_stop++;
+						}
+					}
+				}
 				else
-					plotLineHigh(x_start, y_start, x_stop, y_stop, color);
-				width--;
-				x_start++;
-				x_stop++;
-			}
+				{
+					x_start	+= width/2;
+					x_stop	+= width/2;
+					if(x_start != x_stop)
+					{
+						y_start	-= width/2 + 1;
+						y_stop	-= width/2 + 1;
+					}
+					while(width > 0)
+					{
+						plotLineHigh(x_start, y_start, x_stop, y_stop, color);
+						if(x_start != x_stop)
+						{
+//							if(width > 1)
+//							{
+//								UB_VGA_drawLine(x_start, y_start +1, x_stop -1, y_stop +1, 1, color);
+//							}
+							y_start++;
+							y_stop++;
+						}
+
+						width--;
+						x_start--;
+						x_stop--;
+
+					}
+				}
+
 		}
 	return error;
 }
