@@ -492,29 +492,29 @@ uint8_t UB_VGA_FillScreen(uint8_t color)
 }
 
 
-const char *Draw_Bitmap(uint8_t nr,uint16_t xp, uint16_t yp)
+uint8_t Draw_Bitmap(uint8_t nr,uint16_t xp, uint16_t yp)
 {
 	uint8_t error = 0;
 	uint8_t x, y;
 	uint8_t *image;
 
 	switch (nr) {
-	case 1:
+	case 0:
 		image = &pijl_rechts[0];
 		break;
-	case 2:
+	case 1:
 		image = &pijl_omhoog[0];
 		break;
-	case 3:
+	case 2:
 		image = &pijl_links[0];
 		break;
-	case 4:
+	case 3:
 		image = &pijl_omlaag[0];
 		break;
-	case 5:
+	case 4:
 		image = &smiley_boos[0];
 		break;
-	case 6:
+	case 5:
 		image = &smiley_blij[0];
 		break;
 	}
@@ -538,38 +538,8 @@ uint8_t Draw_Text(uint16_t x0, uint16_t y0, uint8_t *text, uint8_t color)
 				error = 2;
 	while (*text != '\0')
 	{
-
-		if (strcmp((char*)Font, "norm") == 0)
-		{
-			for (i = 0; i < 8; i++)
-				bitmap[i] = font8x8[*text][i];
-		}
-//		else if (strcmp(string, "xxx") == 0)
-//		{
-//			for (i = 0; i < 8; i++)
-//				bitmap[i] = font[*text][i];
-//		}
-//		else if (strcmp(string, "xxx") == 0)
-//		{
-//			for (i = 0; i < 8; i++)
-//				bitmap[i] = font[*text][i];
-//		}
-//		else if (strcmp(string, "xxx") == 0)
-//		{
-//			for (i = 0; i < 8; i++)
-//				bitmap[i] = font[*text][i];
-//		}
-//		else if (strcmp(string, "xxx") == 0)
-//		{
-//			for (i = 0; i < 8; i++)
-//				bitmap[i] = font[*text][i];
-//		}
-//		else if (strcmp(string, "xxx") == 0)
-//		{
-//			for (i = 0; i < 8; i++)
-//				bitmap[i] = font[*text][i];
-//		}
-
+		for (i = 0; i < 8; i++)
+			bitmap[i] = font8x8[*text][i];
 
 		for (y = 0; y < 8; y++) {
 			for (x = 0; x < 8; x++) {
