@@ -21,6 +21,8 @@
 //--------------------------------------------------------------
 #include "stm32_ub_vga_shapes.h"
 #include "Bfont.h"
+#include "bitmap.h"
+#include "string.h"
 
 
 uint8_t readPixel(uint16_t xp, uint16_t yp);
@@ -490,10 +492,33 @@ uint8_t UB_VGA_FillScreen(uint8_t color)
 }
 
 
-uint8_t Draw_Bitmap(uint8_t *image,uint16_t xp, uint16_t yp)
+const char *Draw_Bitmap(uint8_t nr,uint16_t xp, uint16_t yp)
 {
 	uint8_t error = 0;
 	uint8_t x, y;
+	uint8_t *image;
+
+	switch (nr) {
+	case 1:
+		image = &pijl_rechts[0];
+		break;
+	case 2:
+		image = &pijl_omhoog[0];
+		break;
+	case 3:
+		image = &pijl_links[0];
+		break;
+	case 4:
+		image = &pijl_omlaag[0];
+		break;
+	case 5:
+		image = &smiley_boos[0];
+		break;
+	case 6:
+		image = &smiley_blij[0];
+		break;
+	}
+
 	for (y = 0; y < 48; y++) {
 		for (x = 0; x < 48; x++) {
 			UB_VGA_SetPixel(x+xp, y+yp, *(image)++);
@@ -513,8 +538,38 @@ uint8_t Draw_Text(uint16_t x0, uint16_t y0, uint8_t *text, uint8_t color)
 				error = 2;
 	while (*text != '\0')
 	{
-		for (i = 0; i < 8; i++)
-			bitmap[i] = font[*text][i];
+
+		if (strcmp((char*)Font, "norm") == 0)
+		{
+			for (i = 0; i < 8; i++)
+				bitmap[i] = font8x8[*text][i];
+		}
+//		else if (strcmp(string, "xxx") == 0)
+//		{
+//			for (i = 0; i < 8; i++)
+//				bitmap[i] = font[*text][i];
+//		}
+//		else if (strcmp(string, "xxx") == 0)
+//		{
+//			for (i = 0; i < 8; i++)
+//				bitmap[i] = font[*text][i];
+//		}
+//		else if (strcmp(string, "xxx") == 0)
+//		{
+//			for (i = 0; i < 8; i++)
+//				bitmap[i] = font[*text][i];
+//		}
+//		else if (strcmp(string, "xxx") == 0)
+//		{
+//			for (i = 0; i < 8; i++)
+//				bitmap[i] = font[*text][i];
+//		}
+//		else if (strcmp(string, "xxx") == 0)
+//		{
+//			for (i = 0; i < 8; i++)
+//				bitmap[i] = font[*text][i];
+//		}
+
 
 		for (y = 0; y < 8; y++) {
 			for (x = 0; x < 8; x++) {

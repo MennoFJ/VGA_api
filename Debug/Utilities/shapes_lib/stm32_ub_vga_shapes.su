@@ -1,0 +1,6 @@
+stm32_ub_vga_shapes.c:32:13:UB_VGA_SetPixel	16	static
+stm32_ub_vga_shapes.c:53:13:UB_VGA_drawLine	40	static
+stm32_ub_vga_shapes.c:82:13:UB_VGA_drawRectangle	40	static
+stm32_ub_vga_shapes.c:99:13:UB_VGA_FillScreen	24	static
+stm32_ub_vga_shapes.c:112:13:Draw_Bitmap	24	static
+stm32_ub_vga_shapes.c:147:6:Draw_Text	40	static

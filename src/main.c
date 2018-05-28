@@ -20,7 +20,7 @@
 #include "stm32_ub_vga_IO.h"
 #include "uart.h"
 #include "delay.h"
-#include "bitmap.h"
+
 //#include <Bfont.h>
 
 
@@ -32,6 +32,8 @@ int main(void)
 
 	//char *c = "jooo maat alles goed met mij wel ja echt jajajajajajajajajajaja";
 	char *c = "abcdefghijklmnopqrstuvwxyz";
+	char *c = "Het is gelukt waaaaajoooo";
+	char *x = "norm";
 
 	SystemInit(); // System speed to 168MHz
 
@@ -42,9 +44,8 @@ int main(void)
 	UART_INT_init();
 
 
-//	UB_VGA_FillScreen(VGA_COL_GREEN);
-//	//demo code to show lines work from every angle in both directions.
-//	UB_VGA_drawLine(50,10 ,50, 50, 3, VGA_COL_RED);
+	UB_VGA_FillScreen(VGA_COL_GREEN);
+	//demo code to show lines work from every angle in both directions.
 //	int i;
 //	for(i=10; i < 51; i++)
 //		UB_VGA_drawLine(10,i ,50, 50, 1, VGA_COL_RED);
@@ -88,12 +89,12 @@ int main(void)
 ////	driehoek,100,100,30,20,250,250,cyaan
 ////	driehoek,130,130,17,12,333,233,groen
 
+	Draw_Bitmap(&fuck[0], 100, 100);
 
+	Draw_Text(200, 200, (uint8_t*)c, 0x00);
 
-	UB_VGA_FillScreen(VGA_COL_BLACK);
-	UB_VGA_drawLine(1,1 ,100,100, 4, VGA_COL_BLUE);
-	UB_VGA_drawLine(1,1 ,100,100, 1, VGA_COL_RED);
-	UB_VGA_drawLine(100,1 ,100,1, 4, VGA_COL_GREEN);
+	while(1)
+	{
 
 
 	//45 deg with width 1
