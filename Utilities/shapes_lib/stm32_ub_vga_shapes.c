@@ -23,22 +23,29 @@
 #include "Bfont.h"
 
 
-uint16_t readPixel(uint16_t xp, uint16_t yp);
+uint8_t readPixel(uint16_t xp, uint16_t yp);
 //internal functions
-uint16_t scanline(uint16_t x_start, uint16_t x_stop, uint16_t y,uint8_t first_number , uint8_t second_number,  uint8_t color);
+uint8_t scanline(uint16_t x_start, uint16_t x_stop, uint16_t y,uint8_t first_number , uint8_t second_number,  uint8_t color);
+void plotLineLow(int16_t x_stop, int16_t y_stop, int16_t x_start,int16_t y_start, uint8_t color);
+void plotLineHigh(int16_t x_stop, int16_t y_stop, int16_t x_start,int16_t y_start, uint8_t color);
 //--------------------------------------------------------------
 // put one Pixel on the screen with one color
 // Important : the last Pixel+1 from every line must be black (don't know why??)
 //--------------------------------------------------------------
-const char *UB_VGA_SetPixel(uint16_t xp, uint16_t yp, uint8_t color)
+uint8_t UB_VGA_SetPixel(uint16_t xp, uint16_t yp, uint8_t color)
 {
-	if(xp>=VGA_DISPLAY_X) xp=0;
-	if(yp>=VGA_DISPLAY_Y) yp=0;
+	uint8_t error = 0;
+	//checks for incorrect color.
+	if (color < 0 ||color > 256 )
+		error = 2;
+	if((xp>=VGA_DISPLAY_X )||(yp>=VGA_DISPLAY_Y) || xp < 0 || yp < 0)
+	{}
+	else
+		VGA_RAM1[(yp*(VGA_DISPLAY_X+1))+xp]=color;
 
 	// Write pixel to ram
-	VGA_RAM1[(yp*(VGA_DISPLAY_X+1))+xp]=color;
-	//test return
-	return "no errors \n";
+
+	return error;
 }
 
 
@@ -52,25 +59,28 @@ const char *UB_VGA_SetPixel(uint16_t xp, uint16_t yp, uint8_t color)
 
 
 //@TODO: Add AA, add width so that the width does not only go up. It should go up and down around the middle line, add errors.
-const char *UB_VGA_drawLine(uint16_t x_start,uint16_t y_start,uint16_t x_stop, uint16_t y_stop, uint8_t width, uint8_t color)
+uint8_t UB_VGA_drawLine(uint16_t x_start,uint16_t y_start,uint16_t x_stop, uint16_t y_stop, uint8_t width, uint8_t color)
 {
-	char *error = "no errors";
+	uint8_t error = 0;
 	//checks for out of bound errors
 	if(x_start< 0 || x_stop < 0 || y_start < 0 || y_stop < 0
 			|| x_start > VGA_DISPLAY_X || x_stop > VGA_DISPLAY_X
 				|| y_start > VGA_DISPLAY_Y || y_stop > VGA_DISPLAY_Y)
-		error = "line out of bounds";
-
+		error = 1;
+	//checks for incorrect color.
+	if (color < 0 ||color > 256 )
+		error = 2;
 	//checks for incorrect line width.
 	if(width < 0 || width > VGA_DISPLAY_Y )
-		error = "incorrect line width";
+		error = 3;
+
 	if(width == 0)
-		return;
+		return error;
 	if(abs(y_stop - y_start) < abs(x_stop - x_start))
 		{
 			//not correct yet. Needs fixing
-			  y_start -= (width %2 == 0)? width/2: (width/2);
-			  y_stop -= (width %2 == 0)? width/2: (width/2);
+//			  y_start -=  width/2;
+//			  y_stop -= width/2;
 			while(width > 0)
 			{
 				if(x_start > x_stop)
@@ -84,22 +94,62 @@ const char *UB_VGA_drawLine(uint16_t x_start,uint16_t y_start,uint16_t x_stop, u
 		}
 		else
 		{
-			x_start -= (width %2 == 0)? width/2: (width/2);
-			x_stop -= (width %2 == 0)? width/2: (width/2);
-			while(width > 0)
-			{
 				if(y_start > y_stop)
-					plotLineHigh(x_stop, y_stop, x_start, y_start, color);
+				{
+					x_start	-= width/2;
+					x_stop	-= width/2;
+					if(x_start != x_stop)
+					{
+						y_start	-= width/2;
+						y_stop	-= width/2;
+					}
+					while(width > 0)
+					{
+						plotLineHigh(x_stop, y_stop, x_start, y_start, color);
+						width--;
+						x_start++;
+						x_stop++;
+						if(x_start != x_stop)
+						{
+							y_start++;
+							y_stop++;
+						}
+					}
+				}
 				else
-					plotLineHigh(x_start, y_start, x_stop, y_stop, color);
-				width--;
-				x_start++;
-				x_stop++;
-			}
+				{
+					x_start	+= width/2;
+					x_stop	+= width/2;
+					if(x_start != x_stop)
+					{
+						y_start	-= width/2 + 1;
+						y_stop	-= width/2 + 1;
+					}
+					while(width > 0)
+					{
+						plotLineHigh(x_start, y_start, x_stop, y_stop, color);
+						if(x_start != x_stop)
+						{
+//							if(width > 1)
+//							{
+//								UB_VGA_drawLine(x_start, y_start +1, x_stop -1, y_stop +1, 1, color);
+//							}
+							y_start++;
+							y_stop++;
+						}
+
+						width--;
+						x_start--;
+						x_stop--;
+
+					}
+				}
+
 		}
+	return error;
 }
 
-const char plotLineLow(int16_t x_start,int16_t y_start, int16_t x_stop,int16_t y_stop,uint8_t color)
+void plotLineLow(int16_t x_start,int16_t y_start, int16_t x_stop,int16_t y_stop,uint8_t color)
 {
 	int16_t dx = x_stop - x_start;
 	int16_t dy = y_stop - y_start;
@@ -127,7 +177,7 @@ const char plotLineLow(int16_t x_start,int16_t y_start, int16_t x_stop,int16_t y
 	}
 }
 
-const char plotLineHigh(int16_t x_start,int16_t y_start, int16_t x_stop, int16_t y_stop, uint8_t color)
+void plotLineHigh(int16_t x_start,int16_t y_start, int16_t x_stop, int16_t y_stop, uint8_t color)
 {
 	int16_t dx = x_stop - x_start;
 	int16_t dy = y_stop - y_start;
@@ -162,23 +212,52 @@ const char plotLineHigh(int16_t x_start,int16_t y_start, int16_t x_stop, int16_t
 // Important : the last Pixel+1 from every line must be black (don't know why??)
 //--------------------------------------------------------------
 //@TODO:add errors.
-const char *UB_VGA_drawRectangle(uint16_t x_lo,uint16_t y_lo,uint16_t x_rb, uint16_t y_rb, uint8_t color)
+uint8_t UB_VGA_drawRectangle(uint16_t x_lo,uint16_t y_lo,uint16_t x_rb, uint16_t y_rb, uint8_t color)
 {
-	char * error;
+	uint8_t error = 0;
+	uint16_t y_lb;
+	uint16_t temp_x;
+	uint16_t temp_y;
 	//checks for out of bounds errors
 	if(x_lo < 0 || y_lo < 0 || x_rb < 0 || y_rb< 0
 			|| x_lo > VGA_DISPLAY_X || x_rb> VGA_DISPLAY_X
 				|| y_lo > VGA_DISPLAY_Y || y_rb > VGA_DISPLAY_Y)
-		error = "line out of bounds";
+		error = 1;
 
 
-	//checks for incorrect color
-	if (color < 0)
-		error = "color can't be negative";
+	//checks for incorrect color.
+	if (color < 0 ||color > 256 )
+		error = 2;
 	//mirrors the points x/y_lo and x/y_rb.
-	uint16_t y_lb = y_rb;
-	for(int i = y_lb; i < y_lo; i++)
-		error = UB_VGA_drawLine(x_lo, i ,x_rb, i, 1, color);
+	if(x_rb < x_lo)
+	{
+		temp_x = x_rb;
+		x_rb = x_lo;
+		x_lo = x_rb;
+	}
+	if(y_rb < y_lo)
+	{
+		y_lb = y_rb;
+	}
+	else
+	{
+		y_lb = y_lo;
+		temp_y = y_lo;
+		y_lo = y_rb;
+		y_rb = y_lo;
+
+	}
+
+	//links onder wordt rechts boven
+	//uint16_t y_lb = y_rb; original
+
+
+
+
+	for(int i = y_lb; i <= y_lo; i++)
+		UB_VGA_drawLine(x_lo, i ,x_rb, i, 1, color);
+
+
 	return error;
 }
 
@@ -191,15 +270,12 @@ const char *UB_VGA_drawRectangle(uint16_t x_lo,uint16_t y_lo,uint16_t x_rb, uint
 // draws a rectangle from mpx, mpy (mid point x and mid point y) with radius x and radius y.
 // Important : the last Pixel+1 from every line must be black (don't know why??)
 //--------------------------------------------------------------
-const char *UB_VGA_drawEllipse(long xmp,long ymp,long x_radius, long y_radius, uint8_t color)
+uint8_t UB_VGA_drawEllipse(long xmp,long ymp,long x_radius, long y_radius, uint8_t color)
 {
-	char * error;
-
-
-
-	//checks for incorrect color
-	if (color < 0)
-		error = "color can't be negative";
+	uint8_t error = 0;
+	//checks for incorrect color.
+		if (color < 0 ||color > 256 )
+			error = 2;
 
 	int hh = y_radius * y_radius;
 	int ww = x_radius * x_radius;
@@ -227,8 +303,7 @@ const char *UB_VGA_drawEllipse(long xmp,long ymp,long x_radius, long y_radius, u
 	    	UB_VGA_SetPixel(xmp + x, ymp + y, color);
 	    }
 	}
-
-return error;
+	return error;
 }
 
 
@@ -237,8 +312,9 @@ return error;
 // Important : the last Pixel+1 from every line must be black (don't know why??)
 //--------------------------------------------------------------
 //filling with boundary scan. Check
-const char *UB_VGA_drawTriangle(uint16_t x_one,uint16_t y_one,uint16_t x_two, uint16_t y_two ,uint16_t x_tree, uint16_t y_tree, uint8_t color)
+uint8_t UB_VGA_drawTriangle(uint16_t x_one,uint16_t y_one,uint16_t x_two, uint16_t y_two ,uint16_t x_tree, uint16_t y_tree, uint8_t color)
 {
+	uint8_t error = 0;
 	int16_t largest_y;
 	int16_t smallest_y;
 	int16_t smallest_x;
@@ -246,10 +322,20 @@ const char *UB_VGA_drawTriangle(uint16_t x_one,uint16_t y_one,uint16_t x_two, ui
 	int16_t x,y;
 	uint8_t colormatch_xplus, colormatch_yplus;
 	int16_t x_overflowCounter,y_overflowCounter;
+	uint8_t colormatch_x = 0;
+	uint8_t colormatch_y = 0;
+	uint16_t x_plus, y_plus;
+	uint16_t previous_xplus, previous_x;
+	uint16_t current_xplus, current_x;
+	uint16_t number_of_patterns;
+
+	//checks for incorrect color.
+		if (color < 0 ||color > 256 )
+			error = 2;
 	//draws the outline of the triangle.
-	UB_VGA_drawLine(x_one, y_one, x_two, y_two,1, color);
-	UB_VGA_drawLine(x_one, y_one, x_tree, y_tree,1, color);
-	UB_VGA_drawLine(x_two, y_two, x_tree, y_tree,1, color);
+	UB_VGA_drawLine(x_one, y_one, x_two, y_two,1, 1);
+	UB_VGA_drawLine(x_one, y_one, x_tree, y_tree,1, 1);
+	UB_VGA_drawLine(x_two, y_two, x_tree, y_tree,1, 1);
 
 	//checks for the largest y
 	if(y_one >= y_two && y_one >= y_tree)
@@ -279,19 +365,13 @@ const char *UB_VGA_drawTriangle(uint16_t x_one,uint16_t y_one,uint16_t x_two, ui
 		smallest_x = x_two;
 	else
 		smallest_x =x_tree;
-
-	uint8_t colormatch_x = 0;
-	uint8_t colormatch_y = 0;
-
-	uint16_t x_plus, y_plus;
-
 	y_plus = largest_y;
-
-	uint16_t previous_xplus, previous_x;
-	uint16_t current_xplus, current_x;
-	uint16_t number_of_patterns;
+	y_overflowCounter = 0;
 	for(y = smallest_y +1; y < largest_y; y++)
 	{
+		y_overflowCounter++;
+		if(y_overflowCounter > VGA_DISPLAY_Y)
+			break;
 		colormatch_x = 0;
 		colormatch_xplus= 0;
 		x_plus = largest_x +1;
@@ -299,7 +379,7 @@ const char *UB_VGA_drawTriangle(uint16_t x_one,uint16_t y_one,uint16_t x_two, ui
 		x_overflowCounter = 0;
 		previous_xplus = 0;
 		previous_x = 0;
-		number_of_patterns = scanline(smallest_x, largest_x, y, 0 , 1, color);
+		number_of_patterns = scanline(smallest_x, largest_x, y, 0 , 1, 1);
 		//not sure if this works correct
 			if(number_of_patterns < 2)
 				continue;
@@ -309,35 +389,29 @@ const char *UB_VGA_drawTriangle(uint16_t x_one,uint16_t y_one,uint16_t x_two, ui
 
 			if (x_overflowCounter > largest_x * 2)
 				break;
-			if(readPixel(x,y) == color)
+			if(readPixel(x,y) == 1)
 				current_x = 1;
 			else
 				current_x = 0;
-
-
 			if(previous_x == 0 && current_x == 1)
 				colormatch_x++;
 			if(colormatch_x >= 2)
 				break;
 			else if(colormatch_x == 1)
 				UB_VGA_SetPixel(x, y, color);
-
 			x++;
 			previous_x = current_x;
 
-			if(readPixel(x_plus,y) == color)
+			if(readPixel(x_plus,y) == 1)
 				current_xplus = 1;
 			else
 				current_xplus = 0;
-
-
 			if(previous_xplus == 1 && current_xplus == 0)
 				colormatch_xplus++;
 			if(colormatch_xplus >= 2)
 				break;
 			else if(colormatch_xplus == 1)
 				UB_VGA_SetPixel(x_plus, y, color);
-
 			x_plus--;
 			previous_xplus = current_xplus;
 			if(x == x_plus)
@@ -348,12 +422,16 @@ const char *UB_VGA_drawTriangle(uint16_t x_one,uint16_t y_one,uint16_t x_two, ui
 		}
 
 	}
+	UB_VGA_drawLine(x_one, y_one, x_two, y_two,1, color);
+	UB_VGA_drawLine(x_one, y_one, x_tree, y_tree,1, color);
+	UB_VGA_drawLine(x_two, y_two, x_tree, y_tree,1, color);
+	return error;
 
 }
 
 //scans a straight line and returns how many times one color is it in.
 //if(previous_x == 0 && current_x == 1)
-uint16_t scanline(uint16_t x_start, uint16_t x_stop, uint16_t y,uint8_t first_number , uint8_t second_number,  uint8_t color)
+uint8_t scanline(uint16_t x_start, uint16_t x_stop, uint16_t y,uint8_t first_number , uint8_t second_number,  uint8_t color)
 {
 	uint16_t numberOfTimes = 0;
 	uint16_t patternFound = 0;
@@ -376,7 +454,7 @@ uint16_t scanline(uint16_t x_start, uint16_t x_stop, uint16_t y,uint8_t first_nu
 	return patternFound;
 
 }
-uint16_t readPixel(uint16_t xp, uint16_t yp)
+uint8_t readPixel(uint16_t xp, uint16_t yp)
 {
 	return VGA_RAM1[(yp*(VGA_DISPLAY_X+1))+xp];
 
@@ -396,37 +474,43 @@ uint16_t readPixel(uint16_t xp, uint16_t yp)
 // fill the DMA RAM buffer with one color
 //--------------------------------------------------------------
 //@TODO:add errors.
-const char *UB_VGA_FillScreen(uint8_t color)
+uint8_t UB_VGA_FillScreen(uint8_t color)
 {
+	uint8_t error = 0;
 	uint16_t xp,yp;
-
+	//checks for incorrect color.
+		if (color < 0 ||color > 256 )
+			error = 2;
 	for(yp=0;yp<VGA_DISPLAY_Y;yp++) {
 		for(xp=0;xp<VGA_DISPLAY_X;xp++) {
 			UB_VGA_SetPixel(xp,yp,color);
 		}
 	}
-	return "no errors \n";
+	return error;
 }
 
 
-const char *Draw_Bitmap(uint8_t *image,uint16_t xp, uint16_t yp)
+uint8_t Draw_Bitmap(uint8_t *image,uint16_t xp, uint16_t yp)
 {
+	uint8_t error = 0;
 	uint8_t x, y;
-
 	for (y = 0; y < 48; y++) {
 		for (x = 0; x < 48; x++) {
 			UB_VGA_SetPixel(x+xp, y+yp, *(image)++);
 		}
 	}
-	return "no errors \n";
+	return error;
 }
 
 
-void Draw_Text(uint16_t x0, uint16_t y0, uint8_t *text, uint8_t color)
+uint8_t Draw_Text(uint16_t x0, uint16_t y0, uint8_t *text, uint8_t color)
 {
+	uint8_t error = 0;
 	uint8_t x, y, i, j = 0;
 	uint8_t bitmap[8];
-
+	//checks for incorrect color.
+			if (color < 0 ||color > 256 )
+				error = 2;
 	while (*text != '\0')
 	{
 		for (i = 0; i < 8; i++)
@@ -447,4 +531,5 @@ void Draw_Text(uint16_t x0, uint16_t y0, uint8_t *text, uint8_t color)
 		j++;
 		*text++;
 	}
+	return error;
 }
