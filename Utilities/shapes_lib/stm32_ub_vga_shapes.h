@@ -43,12 +43,11 @@
 #define  VGA_COL_LRED           0xF2
 #define  VGA_COL_LCYAN          0xDF
 #define  VGA_COL_LMAGENTA       0xD3
-#define  VGA_COL_BROWN          0xB0
+#define  VGA_COL_BROWN          0x80
 #define  VGA_COL_GREY	        0x92
+#define  VGA_COL_PINK	        0xF6
+#define  VGA_COL_PURPLE	        0x82
 
-
-#define CHAR_WIDTH 6
-#define CHAR_HEIGHT 8
 
 
 
