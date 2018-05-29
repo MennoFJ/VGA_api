@@ -1,20 +1,19 @@
-//--------------------------------------------------------------
-// File     : stm32_ub_vga_320x240.c
-// CPU      : STM32F4
-// IDE      : CooCox CoIDE 1.7.0
-// Module   : GPIO, TIM, MISC, DMA
-// Function : VGA out by GPIO (320x240 Pixel, 8bit color)
-//
-// signals  : PB11      = HSync-Signal
-//            PB12      = VSync-Signal
-//            PE8+PE9   = color Blue
-//            PE10-PE12 = color Green
-//            PE13-PE15 = color red
-//
-// uses     : TIM1, TIM2
-//            DMA2, Channel6, Stream5
-//--------------------------------------------------------------
-
+/**
+ ***************************************************************
+ *@file 	stum32_ub_vga_shapes.c
+ *@author 	Menno Janssen and Benno Driessen
+ *@date		29 may 2018
+ *@brief	This file contains shapes that can be drawn to a VGA screen.
+ *			Shapes included are:
+ *			- Dot
+ *			- Line
+ *			- Rectangle
+ *			- Ellipse
+ *			- Triangle
+ *			- Bitmap
+ *			- Text
+ ***************************************************************
+ */
 
 //--------------------------------------------------------------
 // Includes
@@ -24,11 +23,16 @@
 #include "bitmap.h"
 #include "string.h"
 
+//-------------------------------------------------------------
 //internal functions
+//--------------------------------------------------------------
 uint8_t readPixel(uint16_t xp, uint16_t yp);
 uint8_t scanline(uint16_t x_start, uint16_t x_stop, uint16_t y,uint8_t first_number , uint8_t second_number,  uint8_t color);
 void plotLineLow(int16_t x_stop, int16_t y_stop, int16_t x_start,int16_t y_start, uint8_t color);
 void plotLineHigh(int16_t x_start,int16_t y_start, int16_t x_stop, int16_t y_stop, uint8_t color, uint8_t width);
+
+
+
 //--------------------------------------------------------------
 // put one Pixel on the screen with one color
 // Important : the last Pixel+1 from every line must be black (don't know why??)
@@ -50,16 +54,18 @@ uint8_t UB_VGA_SetPixel(uint16_t xp, uint16_t yp, uint8_t color)
 }
 
 
-//--------------------------------------------------------------
-
-// draws a line from x_start, y_start to x_stop, y_stop
-
-// Important : the last Pixel+1 from every line must be black (don't know why??)
-
-//--------------------------------------------------------------
-
-
-//@TODO: Add AA, add width so that the width does not only go up. It should go up and down around the middle line, add errors.
+/**
+ * @brief Function the draw a line with width x on a VGA screen.
+ * A line will be drawn between x_start, y_start and x_stop, y_stop.
+ * Starting coordinates of the line can be swapped. x_start can be bigger than x_stop.
+ * @param x_start: the starting x coordinate of the line.
+ * @param y_start: the starting y coordinate of the line.
+ * @param x_stop: The ending x coordinate of the line
+ * @param y_stop: the ending y coordinate of the line.
+ * @param width: the width of the line.
+ * @param color: color of the line, defined in stm32_ub_vga_shapes.h
+ * @retval returns error is 0 when executed without errors.
+ */
 uint8_t UB_VGA_drawLine(uint16_t x_start,uint16_t y_start,uint16_t x_stop, uint16_t y_stop, uint8_t width, uint8_t color)
 {
 	uint8_t error = 0;
@@ -143,6 +149,18 @@ uint8_t UB_VGA_drawLine(uint16_t x_start,uint16_t y_start,uint16_t x_stop, uint1
 	return error;
 }
 
+
+/**
+ * @brief called from UB_VGA_drawLine if x_stop > x_start or y_stop > y_start.
+ * Starting coordinates of the line can be swapped. x_start can be bigger than x_stop.
+ * @param x_start: the starting x coordinate of the line.
+ * @param y_start: the starting y coordinate of the line.
+ * @param x_stop: The ending x coordinate of the line
+ * @param y_stop: the ending y coordinate of the line.
+ * @param color: color of the line, defined in stm32_ub_vga_shapes.h
+ * @retval void.
+ */
+
 void plotLineLow(int16_t x_start,int16_t y_start, int16_t x_stop,int16_t y_stop,uint8_t color)
 {
 	int16_t dx = x_stop - x_start;
@@ -186,6 +204,18 @@ void plotLineLow(int16_t x_start,int16_t y_start, int16_t x_stop,int16_t y_stop,
 	}
 }
 
+
+/**
+ * @brief called from UB_VGA_drawLine if x_start > x_stop or  y_start > y_stop.
+ * Starting coordinates of the line can be swapped. x_start can be bigger than x_stop.
+ * @param x_start: the starting x coordinate of the line.
+ * @param y_start: the starting y coordinate of the line.
+ * @param x_stop: The ending x coordinate of the line
+ * @param y_stop: the ending y coordinate of the line.
+ * @param width: the width of the line.
+ * @param color: color of the line, defined in stm32_ub_vga_shapes.h
+ * @retval returns void.
+ */
 void plotLineHigh(int16_t x_start,int16_t y_start, int16_t x_stop, int16_t y_stop, uint8_t color, uint8_t width)
 {
 	int16_t dx = x_stop - x_start;
@@ -234,10 +264,16 @@ void plotLineHigh(int16_t x_start,int16_t y_start, int16_t x_stop, int16_t y_sto
 
 
 
-//--------------------------------------------------------------
-// draws a rectangle from x_lo, y_lo to x_rb, y_rb
-// Important : the last Pixel+1 from every line must be black (don't know why??)
-//--------------------------------------------------------------
+/**
+ * @brief Draws a rectangle on the VGA screen. The algorithm will draw a rectangle between the two given coordinates.
+ * @param x_lo: Bottom left x coordinate of the rectangle.
+ * @param y_lo: Bottom left x coordinate of the rectangle.
+ * @param x_rb: Top right x coordinate of the rectangle
+ * @param y_rb: Top right y coordinate of the rectangle
+ * @param color: color of the rectangle, defined in stm32_ub_vga_shapes.h
+ * @retval returns error is 0 when executed without errors.
+ */
+
 uint8_t UB_VGA_drawRectangle(uint16_t x_lo,uint16_t y_lo,uint16_t x_rb, uint16_t y_rb, uint8_t color)
 {
 	uint8_t error = 0;
@@ -253,7 +289,7 @@ uint8_t UB_VGA_drawRectangle(uint16_t x_lo,uint16_t y_lo,uint16_t x_rb, uint16_t
 	//checks for incorrect color.
 	if (color < 0 ||color > 256 )
 		error = 2;
-	//mirrors the points x/y_lo and x/y_rb.
+	//Checks for orientation of the input coordinates.
 	if(x_rb < x_lo)
 	{
 		temp_x = x_rb;
@@ -279,15 +315,15 @@ uint8_t UB_VGA_drawRectangle(uint16_t x_lo,uint16_t y_lo,uint16_t x_rb, uint16_t
 	return error;
 }
 
-
-
-
-
-
-//--------------------------------------------------------------
-// draws a rectangle from mpx, mpy (mid point x and mid point y) with radius x and radius y.
-// Important : the last Pixel+1 from every line must be black (don't know why??)
-//--------------------------------------------------------------
+/**
+ * @brief Draws an ellipse on the VGA screen. Midpoint has to be set and radius x and y.
+ * @param xmp: x coordinate of middle point of the ellipse.
+ * @param ymp: y coordinate of middle point of the ellipse.
+ * @param x_radius: The radius in the x direction.
+ * @param x_radius: The radius in the y direction.
+ * @param color: color of the ellipse, defined in stm32_ub_vga_shapes.h
+ * @retval returns error is 0 when executed without errors.
+ */
 uint8_t UB_VGA_drawEllipse(long xmp,long ymp,long x_radius, long y_radius, uint8_t color)
 {
 	uint8_t error = 0;
@@ -330,13 +366,19 @@ uint8_t UB_VGA_drawEllipse(long xmp,long ymp,long x_radius, long y_radius, uint8
 	return error;
 }
 
-
-//--------------------------------------------------------------
-// draws a triangle from x_one, y_one to x_two, y_two to x_tree, y_tree.
-// Important : the last Pixel+1 from every line must be black (don't know why??)
-//--------------------------------------------------------------
-//filling with boundary scan. Check
-uint8_t UB_VGA_drawTriangle(uint16_t x_one,uint16_t y_one,uint16_t x_two, uint16_t y_two ,uint16_t x_tree, uint16_t y_tree, uint8_t color)
+/**
+ * @brief Draws a triangle on the VGA screen. A line will be drawn between three given points.
+ * The algorithm then uses boundary filling to fill the triangle. This does not work when part of the triangle is outside of the screen.
+ * @param x_one: First x coordinate of the triangle.
+ * @param y_one: First y coordinate of the triangle.
+ * @param x_two: Second x coordinate of the triangle.
+ * @param y_two: Second y coordinate of the triangle.
+ * @param x_three: third x coordinate of the triangle.
+ * @param y_three: third y coordinate of the triangle.
+ * @param color: color of the Triangle, defined in stm32_ub_vga_shapes.h
+ * @retval returns error is 0 when executed without errors.
+ */
+uint8_t UB_VGA_drawTriangle(uint16_t x_one,uint16_t y_one,uint16_t x_two, uint16_t y_two ,uint16_t x_three, uint16_t y_three, uint8_t color)
 {
 	uint8_t error = 0;
 	int16_t largest_y;
@@ -353,46 +395,46 @@ uint8_t UB_VGA_drawTriangle(uint16_t x_one,uint16_t y_one,uint16_t x_two, uint16
 	uint16_t current_xplus, current_x;
 	uint16_t number_of_patterns;
 	//checks out of bound errors
-	if(x_one < 0 || x_two < 0 || x_tree < 0 || y_one < 0 || y_two < 0 || y_tree < 0
-			|| x_one > VGA_DISPLAY_X || x_two > VGA_DISPLAY_X || x_tree > VGA_DISPLAY_X
-				|| y_one > VGA_DISPLAY_Y || y_two > VGA_DISPLAY_Y || y_tree > VGA_DISPLAY_X)
+	if(x_one < 0 || x_two < 0 || x_three < 0 || y_one < 0 || y_two < 0 || y_three < 0
+			|| x_one > VGA_DISPLAY_X || x_two > VGA_DISPLAY_X || x_three > VGA_DISPLAY_X
+				|| y_one > VGA_DISPLAY_Y || y_two > VGA_DISPLAY_Y || y_three > VGA_DISPLAY_X)
 		error = 1;
 	//checks for incorrect color.
 		if (color < 0 ||color > 256 )
 			error = 2;
 	//draws the outline of the triangle.
 	UB_VGA_drawLine(x_one, y_one, x_two, y_two,1, 1);
-	UB_VGA_drawLine(x_one, y_one, x_tree, y_tree,1, 1);
-	UB_VGA_drawLine(x_two, y_two, x_tree, y_tree,1, 1);
+	UB_VGA_drawLine(x_one, y_one, x_three, y_three,1, 1);
+	UB_VGA_drawLine(x_two, y_two, x_three, y_three,1, 1);
 
 	//checks for the largest y
-	if(y_one >= y_two && y_one >= y_tree)
+	if(y_one >= y_two && y_one >= y_three)
 		 largest_y = y_one;
-	else if(y_two >= y_one && y_two >=  y_tree)
+	else if(y_two >= y_one && y_two >=  y_three)
 		largest_y = y_two;
 	else
-		largest_y = y_tree;
+		largest_y = y_three;
 	//checks for the smallest y
-	if(y_one <= y_two && y_one <= y_tree)
+	if(y_one <= y_two && y_one <= y_three)
 		 smallest_y = y_one;
-	else if(y_two <= y_one && y_two <=  y_tree)
+	else if(y_two <= y_one && y_two <=  y_three)
 		smallest_y = y_two;
 	else
-		smallest_y = y_tree;
+		smallest_y = y_three;
 	//checks for the largest x
-	if(x_one >= x_two && x_one >= x_tree)
+	if(x_one >= x_two && x_one >= x_three)
 		 largest_x = x_one;
-	else if(x_two >= x_one && x_two >=  x_tree)
+	else if(x_two >= x_one && x_two >=  x_three)
 		largest_x = x_two;
 	else
-		largest_x = x_tree;
+		largest_x = x_three;
 	//checks for the smallest x
-	if(x_one <= x_two && x_one <= x_tree)
+	if(x_one <= x_two && x_one <= x_three)
 		 smallest_x = x_one;
-	else if(x_two <= x_one && x_two <=  x_tree)
+	else if(x_two <= x_one && x_two <=  x_three)
 		smallest_x = x_two;
 	else
-		smallest_x =x_tree;
+		smallest_x =x_three;
 	y_plus = largest_y;
 	y_overflowCounter = 0;
 	for(y = smallest_y +1; y < largest_y; y++)
@@ -451,14 +493,22 @@ uint8_t UB_VGA_drawTriangle(uint16_t x_one,uint16_t y_one,uint16_t x_two, uint16
 
 	}
 	UB_VGA_drawLine(x_one, y_one, x_two, y_two,1, color);
-	UB_VGA_drawLine(x_one, y_one, x_tree, y_tree,1, color);
-	UB_VGA_drawLine(x_two, y_two, x_tree, y_tree,1, color);
+	UB_VGA_drawLine(x_one, y_one, x_three, y_three,1, color);
+	UB_VGA_drawLine(x_two, y_two, x_three, y_three,1, color);
 	return error;
 
 }
 
-//scans a straight line and returns how many times one color is it in.
-//if(previous_x == 0 && current_x == 1)
+/**
+ * @brief Scans a line for a pattern and returns the number of times the pattern appears. This function is used by the UB_VGA_drawTriangle function to determine if a boundry is pressen.
+ * @param x_start: The x value the scan will start from.
+ * @param x_stop: The x value the line will scan to.
+ * @param y: The y value the scan will take place.
+ * @param first_number: First number of the pattern.
+ * @param second_number: The second number of the pattern.
+ * @param color: What color the pattern will have.
+ * @retval returns the number of pattern that are found.
+ */
 uint8_t scanline(uint16_t x_start, uint16_t x_stop, uint16_t y,uint8_t first_number , uint8_t second_number,  uint8_t color)
 {
 	uint16_t numberOfTimes = 0;
@@ -484,6 +534,13 @@ uint8_t scanline(uint16_t x_start, uint16_t x_stop, uint16_t y,uint8_t first_num
 	return patternFound;
 
 }
+
+/**
+ * @brief Reads a pixel and returns its color value.
+ * @param xp: The x coordinate of the pixel to be read.
+ * @param yp: The y coordinate of the pixel to be read.
+ * @retval returns error is 0 when executed without errors.
+ */
 uint8_t readPixel(uint16_t xp, uint16_t yp)
 {
 	if(yp > VGA_DISPLAY_Y || xp > VGA_DISPLAY_X)
@@ -493,19 +550,11 @@ uint8_t readPixel(uint16_t xp, uint16_t yp)
 
 }
 
-
-//--------------------------------------------------------------
-
-// draws a line from x_start, y_start to x_stop, y_stop
-
-// Important : the last Pixel+1 from every line must be black (don't know why??)
-
-//--------------------------------------------------------------
-
-
-//--------------------------------------------------------------
-// fill the DMA RAM buffer with one color
-//--------------------------------------------------------------
+/**
+ * @brief Fills the entire screen with one color.
+ * @param color: the color the screen will be set to, defined in stm32_ub_vga_shapes.h
+ * @retval returns error is 0 when executed without errors.
+ */
 uint8_t UB_VGA_FillScreen(uint8_t color)
 {
 	uint8_t error = 0;
@@ -522,6 +571,14 @@ uint8_t UB_VGA_FillScreen(uint8_t color)
 }
 
 
+/**
+ * @brief Displays a bitmap on the screen.
+ * Starting coordinates of the line can be swapped. x_start can be bigger than x_stop.
+ * @param nr: used to pick what bitmap is to be displayed. Bitmaps are defined in bitmap.h
+ * @param xp: the starting x coordinate of the bitmap.
+ * @param yp: The ending y coordinate of the bitmap.
+ * @retval returns error is 0 when executed without errors.
+ */
 uint8_t Draw_Bitmap(uint8_t nr,uint16_t xp, uint16_t yp)
 {
 	uint8_t error = 0;
@@ -567,6 +624,15 @@ uint8_t Draw_Bitmap(uint8_t nr,uint16_t xp, uint16_t yp)
 	return error;
 }
 
+/**
+ * @brief Draws text on the screen. Three fonts available defined in Bfont.h
+ * @param x0: starting x coordinate of the text.
+ * @param y0: the starting y coordinate of the text.
+ * @param text: The text to be displayed on the screen.
+ * @param color: color of the text will be displayed in, defined in stm32_ub_vga_shapes.h
+ * @param font: What font the text will be displayed in. Choices: normal "norm", cursive "cursief" and bold "vet".
+ * @retval returns error is 0 when executed without errors.
+ */
 
 uint8_t Draw_Text(uint16_t x0, uint16_t y0, uint8_t *text, uint8_t color, uint8_t *font)
 {
