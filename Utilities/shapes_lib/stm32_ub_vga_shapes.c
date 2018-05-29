@@ -388,8 +388,8 @@ uint8_t UB_VGA_drawTriangle(uint16_t x_one,uint16_t y_one,uint16_t x_two, uint16
 		while(x <= largest_x)
 		//for(x = smallest_x -1; x < largest_x; x++)
 		{
-
-			if (x_overflowCounter > largest_x * 2)
+			x_overflowCounter++;
+			if (x_overflowCounter >  VGA_DISPLAY_X)
 				break;
 			if(readPixel(x,y) == 1)
 				current_x = 1;
@@ -458,7 +458,10 @@ uint8_t scanline(uint16_t x_start, uint16_t x_stop, uint16_t y,uint8_t first_num
 }
 uint8_t readPixel(uint16_t xp, uint16_t yp)
 {
-	return VGA_RAM1[(yp*(VGA_DISPLAY_X+1))+xp];
+	if(yp > VGA_DISPLAY_Y ||  xp > VGA_DISPLAY_X)
+		return 0;
+	else
+		return VGA_RAM1[(yp*(VGA_DISPLAY_X+1))+xp];
 
 }
 
