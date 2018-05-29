@@ -63,6 +63,7 @@ int main(void)
 //	UB_VGA_FillScreen(VGA_COL_PURPLE);
 //	DELAY_s(2);
 
+<<<<<<< HEAD
 	UB_VGA_FillScreen(VGA_COL_PURPLE);
 //	Draw_Text(200, 200, (uint8_t*)c, 0x00);
 //	//45 deg with width 1
@@ -78,6 +79,26 @@ int main(void)
 	UB_VGA_drawLine(200,10 ,200, 50, 3, VGA_COL_WHITE);
 	UB_VGA_drawLine(200,10 ,200, 50, 1, VGA_COL_BLACK);
 	UB_VGA_drawLine(1,1 ,100, 100, 4, VGA_COL_BLACK);
+=======
+
+
+	UB_VGA_FillScreen(VGA_COL_PURPLE);
+
+
+	Draw_Text(50, 10, (uint8_t*)c, 0x00, "norm");
+//	//45 deg with width 1
+//	UB_VGA_drawLine(70,50 ,110,10, 3, VGA_COL_GREEN);
+//	//UB_VGA_drawLine(20,10 ,60, 50, 3, VGA_COL_GREEN);
+//	UB_VGA_drawLine(20,10 ,30, 20, 3, VGA_COL_BLUE);
+//	UB_VGA_drawLine(21,10 ,30, 20, 1, VGA_COL_RED);
+//	//UB_VGA_drawLine(70,50 ,110,10, 1, VGA_COL_RED);
+//		//UB_VGA_drawLine(20,10 ,60, 50, 1, VGA_COL_RED);
+//	//90 degrees
+//	UB_VGA_drawLine(100,200 ,200,200, 5, VGA_COL_BLUE);
+//		//0 deg to with width 3
+//	UB_VGA_drawLine(200,10 ,200, 50, 3, VGA_COL_WHITE);
+//	UB_VGA_drawLine(200,10 ,200, 50, 1, VGA_COL_BLACK);
+>>>>>>> extra_fonts
 //	Draw_Bitmap(0,100, 100);
 
 
