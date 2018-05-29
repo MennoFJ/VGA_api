@@ -500,7 +500,7 @@ uint8_t Draw_Bitmap(uint8_t nr,uint16_t xp, uint16_t yp)
 		error = 1;
 
 	//checks for unknown bitmap
-	if(nr < 0 || nr < 5)
+	if(nr < 0 || nr > 5)
 		error = 5;
 
 	switch (nr) {
