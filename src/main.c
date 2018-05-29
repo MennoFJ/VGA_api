@@ -77,7 +77,7 @@ int main(void)
 //		//0 deg to with width 3
 //	UB_VGA_drawLine(200,10 ,200, 50, 3, VGA_COL_WHITE);
 //	UB_VGA_drawLine(200,10 ,200, 50, 1, VGA_COL_BLACK);
-	Draw_Bitmap(0,100, 100);
+//	Draw_Bitmap(0,100, 100);
 
 
 	while(1)
