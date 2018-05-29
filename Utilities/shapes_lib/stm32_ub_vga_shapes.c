@@ -29,7 +29,7 @@ uint8_t readPixel(uint16_t xp, uint16_t yp);
 //internal functions
 uint8_t scanline(uint16_t x_start, uint16_t x_stop, uint16_t y,uint8_t first_number , uint8_t second_number,  uint8_t color);
 void plotLineLow(int16_t x_stop, int16_t y_stop, int16_t x_start,int16_t y_start, uint8_t color);
-void plotLineHigh(int16_t x_stop, int16_t y_stop, int16_t x_start,int16_t y_start, uint8_t color);
+void plotLineHigh(int16_t x_start,int16_t y_start, int16_t x_stop, int16_t y_stop, uint8_t color, uint8_t width);
 //--------------------------------------------------------------
 // put one Pixel on the screen with one color
 // Important : the last Pixel+1 from every line must be black (don't know why??)
@@ -107,7 +107,7 @@ uint8_t UB_VGA_drawLine(uint16_t x_start,uint16_t y_start,uint16_t x_stop, uint1
 					}
 					while(width > 0)
 					{
-						plotLineHigh(x_stop, y_stop, x_start, y_start, color);
+						plotLineHigh(x_stop, y_stop, x_start, y_start, color, width);
 						width--;
 						x_start++;
 						x_stop++;
@@ -129,7 +129,7 @@ uint8_t UB_VGA_drawLine(uint16_t x_start,uint16_t y_start,uint16_t x_stop, uint1
 					}
 					while(width > 0)
 					{
-						plotLineHigh(x_start, y_start, x_stop, y_stop, color);
+						plotLineHigh(x_start, y_start, x_stop, y_stop, color, width);
 						if(x_start != x_stop)
 						{
 //							if(width > 1)
@@ -179,7 +179,7 @@ void plotLineLow(int16_t x_start,int16_t y_start, int16_t x_stop,int16_t y_stop,
 	}
 }
 
-void plotLineHigh(int16_t x_start,int16_t y_start, int16_t x_stop, int16_t y_stop, uint8_t color)
+void plotLineHigh(int16_t x_start,int16_t y_start, int16_t x_stop, int16_t y_stop, uint8_t color, uint8_t width)
 {
 	int16_t dx = x_stop - x_start;
 	int16_t dy = y_stop - y_start;
@@ -198,6 +198,8 @@ void plotLineHigh(int16_t x_start,int16_t y_start, int16_t x_stop, int16_t y_sto
 	for(y = y_start ; y <= y_stop; y ++)
 	{
 		UB_VGA_SetPixel(x, y, color);
+		if(width > 1 && x_start != x_stop)
+			UB_VGA_SetPixel(x, y+1, color);
 		if (D > 0)
 		{
 			x = x + xi;
