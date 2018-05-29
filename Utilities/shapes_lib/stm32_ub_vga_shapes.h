@@ -65,7 +65,7 @@ uint8_t UB_VGA_clearscreen(uint8_t color);
 uint8_t UB_VGA_FillScreen(uint8_t color);
 uint8_t UB_VGA_SetPixel(uint16_t xp, uint16_t yp, uint8_t color);
 uint8_t Draw_Bitmap(uint8_t nr,uint16_t xp, uint16_t yp);
-uint8_t Draw_Text(uint16_t x0, uint16_t y0, uint8_t *text, uint8_t color);
+uint8_t Draw_Text(uint16_t x0, uint16_t y0, uint8_t *text, uint8_t color, uint8_t *font);
 
 
 

@@ -44,27 +44,11 @@ int main(void)
 	UART_INT_init();
 
 
-	UB_VGA_FillScreen(VGA_COL_LBLUE);
-	DELAY_s(2);
-	UB_VGA_FillScreen(VGA_COL_LGREEN);
-	DELAY_s(2);
-	UB_VGA_FillScreen(VGA_COL_LRED);
-	DELAY_s(2);
-	UB_VGA_FillScreen(VGA_COL_LCYAN);
-	DELAY_s(2);
-	UB_VGA_FillScreen(VGA_COL_LMAGENTA);
-	DELAY_s(2);
-	UB_VGA_FillScreen(VGA_COL_BROWN);
-	DELAY_s(2);
-	UB_VGA_FillScreen(VGA_COL_GREY);
-	DELAY_s(2);
-	UB_VGA_FillScreen(VGA_COL_PINK);
-	DELAY_s(2);
+
 	UB_VGA_FillScreen(VGA_COL_PURPLE);
-	DELAY_s(2);
 
 
-//	Draw_Text(200, 200, (uint8_t*)c, 0x00);
+	Draw_Text(50, 10, (uint8_t*)c, 0x00, "norm");
 //	//45 deg with width 1
 //	UB_VGA_drawLine(70,50 ,110,10, 3, VGA_COL_GREEN);
 //	//UB_VGA_drawLine(20,10 ,60, 50, 3, VGA_COL_GREEN);
@@ -77,7 +61,7 @@ int main(void)
 //		//0 deg to with width 3
 //	UB_VGA_drawLine(200,10 ,200, 50, 3, VGA_COL_WHITE);
 //	UB_VGA_drawLine(200,10 ,200, 50, 1, VGA_COL_BLACK);
-	Draw_Bitmap(0,100, 100);
+//	Draw_Bitmap(0,100, 100);
 
 
 	while(1)

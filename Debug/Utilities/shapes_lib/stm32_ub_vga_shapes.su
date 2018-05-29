@@ -7,6 +7,6 @@ stm32_ub_vga_shapes.c:275:9:UB_VGA_drawEllipse	64	static
 stm32_ub_vga_shapes.c:317:9:UB_VGA_drawTriangle	72	static
 stm32_ub_vga_shapes.c:436:9:scanline	32	static
 stm32_ub_vga_shapes.c:459:9:readPixel	16	static
-stm32_ub_vga_shapes.c:479:9:UB_VGA_FillScreen	24	static
-stm32_ub_vga_shapes.c:495:9:Draw_Bitmap	32	static
-stm32_ub_vga_shapes.c:531:9:Draw_Text	40	static
+stm32_ub_vga_shapes.c:482:9:UB_VGA_FillScreen	24	static
+stm32_ub_vga_shapes.c:498:9:Draw_Bitmap	32	static
+stm32_ub_vga_shapes.c:534:9:Draw_Text	40	static
