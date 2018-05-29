@@ -66,7 +66,7 @@ uint8_t UB_VGA_drawLine(uint16_t x_start,uint16_t y_start,uint16_t x_stop, uint1
 	//checks for out of bound errors
 	if(x_start< 0 || x_stop < 0 || y_start < 0 || y_stop < 0
 			|| x_start > VGA_DISPLAY_X || x_stop > VGA_DISPLAY_X
-			|| y_start > VGA_DISPLAY_Y || y_stop > VGA_DISPLAY_Y)
+				|| y_start > VGA_DISPLAY_Y || y_stop > VGA_DISPLAY_Y)
 		error = 1;
 	//checks for incorrect color.
 	if (color < 0 ||color > 256 )
@@ -78,38 +78,21 @@ uint8_t UB_VGA_drawLine(uint16_t x_start,uint16_t y_start,uint16_t x_stop, uint1
 	if(width <= 0)
 		return error;
 	if(abs(y_stop - y_start) < abs(x_stop - x_start))
-	{
-		//not correct yet. Needs fixing
-		//			  y_start -=  width/2;
-		//			  y_stop -= width/2;
-		while(width > 0)
 		{
 			while(width > 0)
 			{
-				plotLineHigh(x_stop, y_stop, x_start, y_start, color);
+				if(x_start > x_stop)
+					plotLineLow(x_stop, y_stop, x_start, y_start, color);
+				else
+					plotLineLow(x_start, y_start, x_stop, y_stop, color);
 				width--;
-				x_start++;
-				x_stop++;
-				if(x_start != x_stop)
-				{
-					y_start++;
-					y_stop++;
-				}
+				y_start++;
+				y_stop++;
 			}
 		}
 		else
 		{
-			x_start	+= width/2;
-			x_stop	+= width/2;
-			if(x_start != x_stop)
-			{
-				y_start	-= width/2 + 1;
-				y_stop	-= width/2 + 1;
-			}
-			while(width > 0)
-			{
-				plotLineHigh(x_start, y_start, x_stop, y_stop, color);
-				if(x_start != x_stop)
+				if(y_start > y_stop)
 				{
 					x_start	-= width/2;
 					x_stop	-= width/2;
@@ -149,14 +132,14 @@ uint8_t UB_VGA_drawLine(uint16_t x_start,uint16_t y_start,uint16_t x_stop, uint1
 							y_stop++;
 						}
 
-				width--;
-				x_start--;
-				x_stop--;
+						width--;
+						x_start--;
+						x_stop--;
 
-			}
+					}
+				}
+
 		}
-
-	}
 	return error;
 }
 
@@ -165,6 +148,8 @@ void plotLineLow(int16_t x_start,int16_t y_start, int16_t x_stop,int16_t y_stop,
 	int16_t dx = x_stop - x_start;
 	int16_t dy = y_stop - y_start;
 	int16_t yi = 1;
+	uint16_t xMax;
+	uint16_t yMax;
 	int16_t y;
 	int16_t x;
 	if(dy < 0)
@@ -176,7 +161,20 @@ void plotLineLow(int16_t x_start,int16_t y_start, int16_t x_stop,int16_t y_stop,
 	y = y_start;
 	for (x = x_start; x<= x_stop; x++)
 	{
-		UB_VGA_SetPixel(x, y, color);
+		if(x> VGA_DISPLAY_X && color == 1)
+			xMax = VGA_DISPLAY_X -1;
+		else if(x < 0 && color == 1)
+			xMax = 1;
+		else
+			xMax = x;
+
+		if(y > VGA_DISPLAY_Y && color == 1)
+			yMax = VGA_DISPLAY_X -1;
+		else if(y < 0 && color == 1)
+			y = 1;
+		else
+			yMax = y;
+		UB_VGA_SetPixel(xMax, yMax, color);
 		if(D > 0)
 
 		{
@@ -193,6 +191,8 @@ void plotLineHigh(int16_t x_start,int16_t y_start, int16_t x_stop, int16_t y_sto
 	int16_t dx = x_stop - x_start;
 	int16_t dy = y_stop - y_start;
 	int16_t xi = 1;
+	uint16_t xMax;
+	uint16_t yMax;
 	int16_t y;
 	int16_t x;
 	int16_t D;
@@ -206,7 +206,21 @@ void plotLineHigh(int16_t x_start,int16_t y_start, int16_t x_stop, int16_t y_sto
 
 	for(y = y_start ; y <= y_stop; y ++)
 	{
-		UB_VGA_SetPixel(x, y, color);
+		if(x> VGA_DISPLAY_X && color == 1)
+			xMax = VGA_DISPLAY_X -1;
+		else if(x < 0 && color == 1)
+			xMax = 1;
+		else
+			xMax = x;
+
+		if(y > VGA_DISPLAY_Y && color == 1)
+			yMax = VGA_DISPLAY_X -1;
+		else if(y < 0 && color == 1)
+			y = 1;
+		else
+			yMax = y;
+
+		UB_VGA_SetPixel(xMax, yMax, color);
 		if(width > 1 && x_start != x_stop)
 			UB_VGA_SetPixel(x, y+1, color);
 		if (D > 0)
@@ -233,7 +247,7 @@ uint8_t UB_VGA_drawRectangle(uint16_t x_lo,uint16_t y_lo,uint16_t x_rb, uint16_t
 	//checks for out of bounds errors
 	if(x_lo < 0 || y_lo < 0 || x_rb < 0 || y_rb< 0
 			|| x_lo > VGA_DISPLAY_X || x_rb> VGA_DISPLAY_X
-			|| y_lo > VGA_DISPLAY_Y || y_rb > VGA_DISPLAY_Y)
+				|| y_lo > VGA_DISPLAY_Y || y_rb > VGA_DISPLAY_Y)
 		error = 1;
 
 	//checks for incorrect color.
@@ -300,18 +314,18 @@ uint8_t UB_VGA_drawEllipse(long xmp,long ymp,long x_radius, long y_radius, uint8
 	// now do both halves at the same time, away from the diameter
 	for (int y = 1; y <= y_radius; y++)
 	{
-		int x1 = x0 - (dx - 1);  // try slopes of dx - 1 or more
-		for ( ; x1 > 0; x1--)
-			if (x1*x1*hh + y*y*ww <= hhww)
-				break;
-		dx = x0 - x1;  // current approximation of the slope
-		x0 = x1;
+	    int x1 = x0 - (dx - 1);  // try slopes of dx - 1 or more
+	    for ( ; x1 > 0; x1--)
+	        if (x1*x1*hh + y*y*ww <= hhww)
+	            break;
+	    dx = x0 - x1;  // current approximation of the slope
+	    x0 = x1;
 
-		for (int x = -x0; x <= x0; x++)
-		{
-			UB_VGA_SetPixel(xmp + x, ymp - y, color);
-			UB_VGA_SetPixel(xmp + x, ymp + y, color);
-		}
+	    for (int x = -x0; x <= x0; x++)
+	    {
+	    	UB_VGA_SetPixel(xmp + x, ymp - y, color);
+	    	UB_VGA_SetPixel(xmp + x, ymp + y, color);
+	    }
 	}
 	return error;
 }
@@ -344,8 +358,8 @@ uint8_t UB_VGA_drawTriangle(uint16_t x_one,uint16_t y_one,uint16_t x_two, uint16
 				|| y_one > VGA_DISPLAY_Y || y_two > VGA_DISPLAY_Y || y_tree > VGA_DISPLAY_X)
 		error = 1;
 	//checks for incorrect color.
-	if (color < 0 ||color > 256 )
-		error = 2;
+		if (color < 0 ||color > 256 )
+			error = 2;
 	//draws the outline of the triangle.
 	UB_VGA_drawLine(x_one, y_one, x_two, y_two,1, 1);
 	UB_VGA_drawLine(x_one, y_one, x_tree, y_tree,1, 1);
@@ -353,28 +367,28 @@ uint8_t UB_VGA_drawTriangle(uint16_t x_one,uint16_t y_one,uint16_t x_two, uint16
 
 	//checks for the largest y
 	if(y_one >= y_two && y_one >= y_tree)
-		largest_y = y_one;
+		 largest_y = y_one;
 	else if(y_two >= y_one && y_two >=  y_tree)
 		largest_y = y_two;
 	else
 		largest_y = y_tree;
 	//checks for the smallest y
 	if(y_one <= y_two && y_one <= y_tree)
-		smallest_y = y_one;
+		 smallest_y = y_one;
 	else if(y_two <= y_one && y_two <=  y_tree)
 		smallest_y = y_two;
 	else
 		smallest_y = y_tree;
 	//checks for the largest x
 	if(x_one >= x_two && x_one >= x_tree)
-		largest_x = x_one;
+		 largest_x = x_one;
 	else if(x_two >= x_one && x_two >=  x_tree)
 		largest_x = x_two;
 	else
 		largest_x = x_tree;
 	//checks for the smallest x
 	if(x_one <= x_two && x_one <= x_tree)
-		smallest_x = x_one;
+		 smallest_x = x_one;
 	else if(x_two <= x_one && x_two <=  x_tree)
 		smallest_x = x_two;
 	else
@@ -395,10 +409,10 @@ uint8_t UB_VGA_drawTriangle(uint16_t x_one,uint16_t y_one,uint16_t x_two, uint16
 		previous_x = 0;
 		number_of_patterns = scanline(smallest_x, largest_x, y, 0 , 1, 1);
 		//not sure if this works correct
-		if(number_of_patterns < 2)
-			continue;
+			if(number_of_patterns < 2)
+				continue;
 		while(x <= largest_x)
-			//for(x = smallest_x -1; x < largest_x; x++)
+		//for(x = smallest_x -1; x < largest_x; x++)
 		{
 			x_overflowCounter++;
 			if (x_overflowCounter > VGA_DISPLAY_X)
@@ -452,6 +466,8 @@ uint8_t scanline(uint16_t x_start, uint16_t x_stop, uint16_t y,uint8_t first_num
 	uint8_t current = 0;
 	uint8_t previous = 0;
 	uint16_t x;
+	if(x_stop > VGA_DISPLAY_X)
+		x_stop = VGA_DISPLAY_X;
 	for(x = x_start; x <= x_stop; x++)
 	{
 		if(readPixel(x, y) == color)
@@ -495,8 +511,8 @@ uint8_t UB_VGA_FillScreen(uint8_t color)
 	uint8_t error = 0;
 	uint16_t xp,yp;
 	//checks for incorrect color.
-	if (color < 0 ||color > 256 )
-		error = 2;
+		if (color < 0 ||color > 256 )
+			error = 2;
 	for(yp=0;yp<VGA_DISPLAY_Y;yp++) {
 		for(xp=0;xp<VGA_DISPLAY_X;xp++) {
 			UB_VGA_SetPixel(xp,yp,color);
