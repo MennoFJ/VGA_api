@@ -497,6 +497,7 @@ uint8_t Draw_Bitmap(uint8_t nr,uint16_t xp, uint16_t yp)
 
 	//check for out of bounds
 	if(xp < 0 || yp < 0 || xp > VGA_DISPLAY_X || yp > VGA_DISPLAY_Y)
+		error = 1;
 
 	//checks for unknown bitmap
 	if(nr < 0 || nr < 5)
