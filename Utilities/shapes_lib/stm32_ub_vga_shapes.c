@@ -573,7 +573,6 @@ uint8_t UB_VGA_FillScreen(uint8_t color)
 
 /**
  * @brief Displays a bitmap on the screen.
- * Starting coordinates of the line can be swapped. x_start can be bigger than x_stop.
  * @param nr: used to pick what bitmap is to be displayed. Bitmaps are defined in bitmap.h
  * @param xp: the starting x coordinate of the bitmap.
  * @param yp: The ending y coordinate of the bitmap.
