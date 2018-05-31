@@ -1,22 +1,13 @@
-/*
-Author: 	W Pielage & E Helmond & J.F. van der Bent
-Date:		13-9-2015
-Revision:	5
-
-
-    delay.c:
-          delays for SpARM-board v1
-
-    pin-info:
-           --
-
-To use this delays. Initialize first. In your main add:
-	DELAY_init();
-
-This reads the systemclock and calculates 1 sec/1 ms/1 us.
-
-After that you can use DELAY_s(number of seconds to wait);
-*/
+/**
+ ***************************************************************
+ *@file 	delay.h
+ *@author 	Menno Janssen and Benno Driessen
+ *@date		29 may 2018
+ *@brief	This file contains the delay functions. There are three delay functions declared. One uses microseconds, the other milliseconds and the last one seconds.
+ *@brief	The remaining function is the initializer for the delay functions.
+ *@brief	To use this delays. Initialize first.
+ ***************************************************************
+ */
 
 /****************Libraries******************************/
 /* Libraries needed for Delay are (These are in main.h):
@@ -40,5 +31,5 @@ After that you can use DELAY_s(number of seconds to wait);
 /****************Function Prototypes********************/
 void DELAY_init(void);
 void DELAY_us(unsigned int x);
-void DELAY_ms(unsigned int x);
+uint8_t DELAY_ms(volatile uint8_t time);
 void DELAY_s(unsigned int x);

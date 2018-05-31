@@ -1,20 +1,21 @@
-//--------------------------------------------------------------
-// File     : stm32_ub_vga_IO.c
-// CPU      : STM32F4
-// IDE      : CooCox CoIDE 1.7.0
-// Module   : GPIO, TIM, MISC, DMA
-// Function : VGA out by GPIO (320x240 Pixel, 8bit color)
-//
-// signals  : PB11      = HSync-Signal
-//            PB12      = VSync-Signal
-//            PE8+PE9   = color Blue
-//            PE10-PE12 = color Green
-//            PE13-PE15 = color red
-//
-// uses     : TIM1, TIM2
-//            DMA2, Channel6, Stream5
-//--------------------------------------------------------------
-
+/**
+ ***************************************************************
+ *@file 	stm32_ub_vga_IO.c
+ *@author 	Menno Janssen and Benno Driessen
+ *@date		29 may 2018
+ *@brief	Module   : GPIO, TIM, MISC, DMA
+ *@brief	Function : VGA out by GPIO (320x240 Pixel, 8bit color)
+ *@brief	signals:
+ *@brief	PB11 = HSync-Signal
+ *@brief	PB12      = VSync-Signal
+ *@brief	PE8+PE9   = color Blue
+ *@brief	PE10-PE12 = color Green
+ *@brief	PE13-PE15 = color red
+ *@brief	uses:
+ *@brief	TIM1, TIM2
+ *@brief	DMA2, Channel6, Stream5
+ ***************************************************************
+ */
 
 //--------------------------------------------------------------
 // Includes
@@ -29,9 +30,11 @@ void P_VGA_InitINT(void);
 void P_VGA_InitDMA(void);
 
 
-//--------------------------------------------------------------
-// Init VGA-Module
-//--------------------------------------------------------------
+/**
+ * @brief Initializes the VGA screen.
+ * @param void
+ * @retval void
+ */
 void UB_VGA_Screen_Init(void)
 {
   uint16_t xp,yp;
@@ -74,11 +77,11 @@ void UB_VGA_Screen_Init(void)
 
 
 
-
-//--------------------------------------------------------------
-// interne Funktionen
-// init aller IO-Pins
-//--------------------------------------------------------------
+/**
+ * @brief Initializes all IO pins.
+ * @param void
+ * @retval void
+ */
 void P_VGA_InitIO(void)
 {
   GPIO_InitTypeDef  GPIO_InitStructure;
@@ -143,11 +146,11 @@ void P_VGA_InitIO(void)
   GPIOB->BSRRL = GPIO_Pin_12;
 }
 
-
-//--------------------------------------------------------------
-// internal Function
-// init Timer
-//--------------------------------------------------------------
+/**
+ * @brief Initializes timer1 and timer2.
+ * @param void
+ * @retval void
+ */
 void P_VGA_InitTIM(void)
 {
   TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
@@ -216,10 +219,11 @@ void P_VGA_InitTIM(void)
 
 }
 
-//--------------------------------------------------------------
-// internal Function
-// init Interrupts
-//--------------------------------------------------------------
+/**
+ * @brief Initializes the interrupt for DMA.
+ * @param void
+ * @retval void
+ */
 void P_VGA_InitINT(void)
 {
   NVIC_InitTypeDef NVIC_InitStructure;
@@ -256,11 +260,11 @@ void P_VGA_InitINT(void)
   NVIC_Init(&NVIC_InitStructure);
 }
 
-
-//--------------------------------------------------------------
-// internal Function
-// init DMA
-//--------------------------------------------------------------
+/**
+ * @brief Initializes the VGA DMA buffer.
+ * @param void
+ * @retval void
+ */
 void P_VGA_InitDMA(void)
 {
   DMA_InitTypeDef DMA_InitStructure;
@@ -300,12 +304,11 @@ void P_VGA_InitDMA(void)
 
 
 
-//--------------------------------------------------------------
-// Interrupt of Timer2
-//
-//   CC3-Interrupt    -> starts from DMA
-// Watch it.. higher troughput when interrupt flag is left alone
-//--------------------------------------------------------------
+/**
+ * @brief Initializes ISR for timer 2.
+ * @param void
+ * @retval void
+ */
 void TIM2_IRQHandler(void)
 {
 
@@ -352,12 +355,11 @@ void TIM2_IRQHandler(void)
 }
 
 
-//--------------------------------------------------------------
-// DMA Interrupt ISR
-//   after TransferCompleteInterrupt -> stop DMA
-//
-// still a bit buggy
-//--------------------------------------------------------------
+/**
+ * @brief Initializes the DMA ISR.
+ * @param void
+ * @retval void
+ */
 void DMA2_Stream5_IRQHandler(void)
 {
   if(DMA_GetITStatus(DMA2_Stream5, DMA_IT_TCIF5))

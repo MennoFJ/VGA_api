@@ -1,35 +1,35 @@
-/*
-Author: 	W Pielage & E Helmond & J.F. van der Bent
-Date:		13-9-2015
-Revision:	5
-
-    uart.c:
-          UART2 driver for SpARM-board v1
-
-    pin-info:
-           PA2 - TX
-           PA3 - RX
-
-To enable UART use the following line:
-	UART_init();
-To use UART on interrupt base use:
-	UART_INT_init();
-
-This file initialize the UART on the ARM-board v5.
-To send data to the UART use:
-	UART_printf(*string);
-
-To read the UART without interrupt use:
-	char = USART2->DR & 0xFF;
-
-In the interrupt routine the char is send back to the terminal
-*/
+/**
+ ***************************************************************
+ *@file 	uart.c
+ *@author 	Menno Janssen and Benno Driessen
+ *@date		29 may 2018
+ *@brief	pin-info:
+ *@brief    	PA2 - TX
+ *@brief    	PA3 - RX
+ *@brief    To enable UART use the following line:   UART_init();
+ *@brief    To use UART on interrupt base use:  UART_INT_init();
+ *@brief    This file initialize the UART on the ARM-board v5.
+ *@brief    To send data to the UART use:
+ *@brief         UART_printf(*string);
+ *@brief
+ *@brief    To read the UART without interrupt use:
+ *@brief    char = USART2->DR & 0xFF;
+ *@brief    In the interrupt routine the char is send back to the terminal
+ ***************************************************************
+ */
 
 #include "uart.h"
 
 /****************Globals********************************/
 char string[100];
 int charcounter = 0;
+
+
+/**
+ * @brief Initializes the UART.
+ * @param void
+ * @retval void
+ */
 
 void UART_init(void)
 /* UART Initialize
@@ -82,6 +82,11 @@ void UART_init(void)
 	USART_Cmd(USART2, ENABLE);
 }
 
+/**
+ * @brief UART Interrupt initializer.
+ * @param void
+ * @retval void
+ */
 void UART_INT_init(void)
 /* UART Interrupt initialize
  * Initialize the NVIC for interrupt handling.
@@ -95,7 +100,11 @@ void UART_INT_init(void)
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
 }
-
+/**
+ * @brief UART IRQ Handler.
+ * @param void
+ * @retval void
+ */
 void USART2_IRQHandler(void)
 /* UART IRQ Handler
  * This function handles the interrupt. In this function the char can be put
@@ -128,7 +137,12 @@ void USART2_IRQHandler(void)
 
 	}
 }
-
+/**
+ * @brief UART print function
+ * @param length: length of the string to be transmitted.
+ * @param pFormat: Characters to be send.
+ * @retval rc
+ */
 signed int UART_printf(size_t length, const char *pFormat, ...)
 /* UART printf
  * This function translates a string with variables to a string and puts in on the UART

@@ -1,10 +1,33 @@
+/*! \mainpage
+ * This is the VGA_API library. The API is used to generated images on a VGA screen. It consist of two separate directory's, the IO library and the Shapes library.
+ * This API support the demo application, for this see the demo application Doxygen. This API is written for the STM32F407VG development board as part of a school project.
+ * \section IO
+ * This directory contains three different .c files: delay.c, uart.c and stm32_ub_vga_IO.c.
+ * \subsection step1 delay.c:
+ * The delay.c file contains three functions to delay the application. The time intervals are in microseconds, milliseconds and seconds.
+ * \subsection step2 uart.c:
+ * This file handles all the UART data for the RX and TX side.
+ * \subsection step3 stm32_ub_vga_IO.c:
+ * This file is used to initialize all the IO functions used by the STM32F407VG.
+ * \section Shapes
+ * The shapes directory contains the stm32_ub_vga_shapes.c file. In this file the functions to draw shapes on the VGA screen are defined.
+ * Shapes that are included are:
+ *			- Dot
+ *			- Line
+ *			- Rectangle
+ *			- Ellipse
+ *			- Triangle
+ *			- Bitmap
+ *			- Text
+ */
+
 /**
  ***************************************************************
  *@file 	stum32_ub_vga_shapes.c
  *@author 	Menno Janssen and Benno Driessen
  *@date		29 may 2018
  *@brief	This file contains shapes that can be drawn to a VGA screen.
- *			Shapes included are:
+ *			Shapes that are included are:
  *			- Dot
  *			- Line
  *			- Rectangle
@@ -578,7 +601,7 @@ uint8_t UB_VGA_FillScreen(uint8_t color)
  * @param yp: The ending y coordinate of the bitmap.
  * @retval returns error is 0 when executed without errors.
  */
-uint8_t Draw_Bitmap(uint8_t nr,uint16_t xp, uint16_t yp)
+uint8_t UB_VGA_drawBitmap(uint8_t nr,uint16_t xp, uint16_t yp)
 {
 	uint8_t error = 0;
 	uint8_t x, y;
@@ -633,7 +656,7 @@ uint8_t Draw_Bitmap(uint8_t nr,uint16_t xp, uint16_t yp)
  * @retval returns error is 0 when executed without errors.
  */
 
-uint8_t Draw_Text(uint16_t x0, uint16_t y0, uint8_t *text, uint8_t color, uint8_t *font)
+uint8_t UB_VGA_drawText(uint16_t x0, uint16_t y0, uint8_t *text, uint8_t color, uint8_t *font)
 {
 	uint8_t error = 0;
 	uint8_t x, y, i, j = 0;

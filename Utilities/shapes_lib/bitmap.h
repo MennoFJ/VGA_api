@@ -1,3 +1,12 @@
+/**
+ ***************************************************************
+ *@file 	bitmap.h
+ *@author 	Menno Janssen and Benno Driessen
+ *@date		29 may 2018
+ *@brief	Contains the bitmaps.
+ ***************************************************************
+ */
+
 #ifndef __BITMAP_H
 #define __BITMAP_H
 

@@ -61,13 +61,12 @@ uint8_t UB_VGA_drawLine(uint16_t x_start,uint16_t y_start,uint16_t x_stop, uint1
 uint8_t UB_VGA_drawEllipse(long xmp,long ymp,long x_radius, long y_radius, uint8_t color);
 uint8_t UB_VGA_drawRectangle(uint16_t x_lo,uint16_t y_lo,uint16_t x_rb, uint16_t y_rb, uint8_t color);
 uint8_t UB_VGA_drawTriangle(uint16_t x_one,uint16_t y_one,uint16_t x_two, uint16_t y_two ,uint16_t x_three, uint16_t y_three, uint8_t color);
-uint8_t UB_VGA_drawText(uint16_t x_start,uint16_t y_start, uint16_t x_fontname, uint16_t style , uint8_t color);
 uint8_t UB_VGA_setBitmap(uint8_t img_number,uint16_t x_start, uint16_t y_start);
 uint8_t UB_VGA_clearscreen(uint8_t color);
 uint8_t UB_VGA_FillScreen(uint8_t color);
 uint8_t UB_VGA_SetPixel(uint16_t xp, uint16_t yp, uint8_t color);
-uint8_t Draw_Bitmap(uint8_t nr,uint16_t xp, uint16_t yp);
-uint8_t Draw_Text(uint16_t x0, uint16_t y0, uint8_t *text, uint8_t color, uint8_t *font);
+uint8_t UB_VGA_drawBitmap(uint8_t nr,uint16_t xp, uint16_t yp);
+uint8_t UB_VGA_drawText(uint16_t x0, uint16_t y0, uint8_t *text, uint8_t color, uint8_t *font);
 
 
 

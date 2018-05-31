@@ -1,7 +1,21 @@
-//--------------------------------------------------------------
-// File     : stm32_ub_vga_IO.h
-//--------------------------------------------------------------
-
+/**
+ ***************************************************************
+ *@file 	stm32_ub_vga_IO.h
+ *@author 	Menno Janssen and Benno Driessen
+ *@date		29 may 2018
+ *@brief	Module   : GPIO, TIM, MISC, DMA
+ *@brief	Function : VGA out by GPIO (320x240 Pixel, 8bit color)
+ *@brief	signals:
+ *@brief	PB11 = HSync-Signal
+ *@brief	PB12      = VSync-Signal
+ *@brief	PE8+PE9   = color Blue
+ *@brief	PE10-PE12 = color Green
+ *@brief	PE13-PE15 = color red
+ *@brief	uses:
+ *@brief	TIM1, TIM2
+ *@brief	DMA2, Channel6, Stream5
+ ***************************************************************
+ */
 
 #ifndef __STM32F4_UB_VGA_IO_H
 #define __STM32F4_UB_VGA_IO_H
